@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: ./
+      target: runner
+    volumes:
+      - .:/app:cached
+    command: npm run dev
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: crypolt
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: infoservice
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: infoservice
+      MYSQL_USER: crypolt
+      MYSQL_PASSWORD: root
+    ports:
+      - "3309:3309"
+
+volumes:
+  mysql-data:
