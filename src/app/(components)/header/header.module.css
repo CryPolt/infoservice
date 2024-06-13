@@ -1,0 +1,74 @@
+/* Navbar.module.css */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333333;
+    padding: 0;
+}
+
+.navbarLogo {
+    padding: 15px;
+    color: #fff;
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+}
+
+
+
+.navbarCollapse {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.navbarNav {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.navItem {
+    position: relative;
+}
+
+.navLink {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+    padding: 20px;
+    transition: color 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.navLink:hover {
+    color: red;
+}
+
+.active .navLink {
+    color: #333;
+}
+
+
+@media (max-width: 991px) {
+    .navbarToggler {
+        display: block;
+    }
+
+    .navbarCollapse {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbarCollapse.show {
+        display: flex;
+    }
+
+    .navLink {
+        padding: 12px 30px;
+    }
+
+}
