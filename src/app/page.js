@@ -1,6 +1,7 @@
 import {Header} from './(components)/header/header';
 import {Footer} from "./(components)/footer";
 import {Main} from "./(components)/main/main";
+// import {V} from './service/create/page';
 
 export default async function Home() {
   return (
@@ -8,6 +9,6 @@ export default async function Home() {
         <Header />
           <Main />
         <Footer />
-      </>
+     </>
   );
 }

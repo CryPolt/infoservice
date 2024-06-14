@@ -1,96 +1,65 @@
 "use client";
-import style from './service.module.css'
-import {Header} from '../(components)/header/header'
+import style from './service.module.css';
+import { Header } from '@/app/(components)/header/header';
 import { useState } from 'react';
+
 export default function Service() {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [newItem, setNewItem] = useState({ title: '', info: '' });
+    const [currentItem, setCurrentItem] = useState(null);
+    const [portfolioItems, setPortfolioItems] = useState([
+        { title: 'Service Name 1', info: 'Service info 1' },
+        { title: 'Service Name 2', info: 'Service info 2' }
+    ]);
 
+    const openModal = (item) => {
+        setCurrentItem(item);
+        setModalOpen(true);
+    };
 
-        const [modalOpen, setModalOpen] = useState(false);
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
-        const openModal = () => {
-                setModalOpen(true);
-        };
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem(prevState => ({ ...prevState, [name]: value }));
+    };
 
-        const closeModal = () => {
-                setModalOpen(false);
-        };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newItemObject = { title: newItem.title, info: newItem.info };
+        setPortfolioItems(prevItems => [...prevItems, newItemObject]);
+        setNewItem({ title: '', info: '' });
+    };
 
-        return (
-            <>
-                    <Header />
+    return (
+        <>
+            <Header />
             <div className={style.portfolio}>
-                    <ul>
-                            <li onClick={openModal}>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                            <li>
-                                    <div className={style.caption}>
-                                            <i className="fa fa-pencil fa-lg"></i>
-                                            <h1>Portfolio Item</h1>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet dui non tortor feugiat</p>
-                                    </div>
-                            </li>
-                    </ul>
+                <ul>
+                    {portfolioItems.map((item, index) => (
+                        <li key={index} onClick={() => openModal(item)}>
+                            <div className={style.caption}>
+                                <i className="fa fa-pencil fa-lg"></i>
+                                <h1>{item.title}</h1>
+                                <p>{item.info}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
 
+            {modalOpen && currentItem && (
+                <div className={style.modal}>
+                    <div className={style.modalContent}>
+                        <span className={style.close} onClick={closeModal}>&times;</span>
+                        <h2>{currentItem.title}</h2>
+                        <p>{currentItem.info}</p>
+                    </div>
+                </div>
+            )}
+        </>
 
-
-                    {modalOpen && (
-                        <div className={style.modal}>
-                                <div className={style.modalContent}>
-                                        <span className={style.close} onClick={closeModal}>&times;</span>
-                                        <h2>Modal Title</h2>
-                                        <p>Modal Content</p>
-                                </div>
-                        </div>
-                    )}
-
-            </>
-        );
+    );
 }
