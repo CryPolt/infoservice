@@ -2,6 +2,8 @@
 import style from './service.module.css';
 import { Header } from '@/app/(components)/header/header';
 import { useState } from 'react';
+import Image from "next/image";
+import sc from "../../../public/sc.svg";
 
 export default function Service() {
     const [modalOpen, setModalOpen] = useState(false);
@@ -56,6 +58,9 @@ export default function Service() {
                         <span className={style.close} onClick={closeModal}>&times;</span>
                         <h2>{currentItem.title}</h2>
                         <p>{currentItem.info}</p>
+                        <Image
+                            src={sc}
+                            alt=''/>
                     </div>
                 </div>
             )}

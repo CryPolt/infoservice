@@ -92,3 +92,9 @@
     font-size: 30px;
     cursor: pointer;
 }
+
+.polygonsContainer {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.1); /* Light color to make polygons visible */
+    border: 1px solid black; /* Border to make polygons visible */
+}
