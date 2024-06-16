@@ -1,5 +1,5 @@
 // import Test from './test';
 //
-// export default async function page() {
-//     return <Test />
-// }
+export default async function GET(request) {
+    return 'hello'
+}

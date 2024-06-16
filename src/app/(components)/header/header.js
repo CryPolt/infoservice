@@ -19,12 +19,17 @@ export const Header = () => {
                     </li>
                     <li className={styles.navItem}>
                         <a className={styles.navLink} href="#">
-                             Team
+                            Team
                         </a>
                     </li>
                     <li className={styles.navItem}>
                         <a className={styles.navLink} href="#">
                             Documentation
+                        </a>
+                    </li>
+                    <li className={styles.navItem}>
+                        <a className={styles.navLink} href="/floweditor">
+                            FlowEditor
                         </a>
                     </li>
                 </ul>

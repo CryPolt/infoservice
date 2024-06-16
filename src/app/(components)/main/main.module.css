@@ -1,0 +1,13 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main {
+    background-color: #fff;
+    padding: 20px;
+}
+.section {
+    margin-bottom: 30px;
+}

@@ -1,19 +1,20 @@
 import {Header} from './(components)/header/header';
 import {Footer} from "./(components)/footer";
-import {FlowEditor} from "./(components)/main/main";
-import Head from 'next/head';
+import {Main} from "./(components)/main/main";
+import {Left} from "@/app/(components)/leftside/left"
+import styles from './page.module.css'
 
-// import {V} from './service/create/page';
 
 export default async function Home() {
   return (
       <>
           <Header/>
+
+          <div className={styles.container}>
+              <Left/>
+              <Main/>
+          </div>
           <Footer/>
-          <main style={{padding: '20px'}}>
-              <h1>Flowchart Editor</h1>
-              <FlowEditor/>
-          </main>
       </>
   );
 }

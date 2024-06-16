@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "id": "randomnode_1718483125389",
+      "data": {
+        "label": "Aasdddddd"
+      },
+      "position": {
+        "x": 1001.8295517597835,
+        "y": -58.816772192333275
+      },
+      "width": 150,
+      "height": 37,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1001.8295517597835,
+        "y": -58.816772192333275
+      },
+      "dragging": false
+    }
+  ],
+  "edges": [],
+  "viewport": {
+    "x": 179.04784854626223,
+    "y": 405.3149280662745,
+    "zoom": 0.5
+  }
+}
