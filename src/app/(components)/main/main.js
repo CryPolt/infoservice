@@ -3,6 +3,7 @@ import styles from './main.module.css';
 export const Main = () => {
     return (
         <>
+            <div className={styles.main}>
             <div className={styles.mainSection}>
                 <div className={styles.sectionTitle}>Active Cards</div>
                 <div className={styles.card}>
@@ -26,6 +27,7 @@ export const Main = () => {
                     </div>
                     <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
                 </div>
+            </div>
             </div>
         </>
     )

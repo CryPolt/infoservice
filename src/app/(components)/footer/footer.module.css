@@ -1,0 +1,28 @@
+#line {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    background-color: gray;
+    height: 2px;
+    margin-bottom: 30px;
+}
+
+.footertext {
+    color: darkgray;
+    margin-left: 10vw;
+}
+
+#links {
+    position: absolute;
+    top: 87px;
+    right: 10vw;
+}
+
+#links a {
+    color: darkgray;
+}
+
+.footerspan {
+    margin-left: 30px;
+}

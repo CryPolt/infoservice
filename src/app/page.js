@@ -1,5 +1,5 @@
 import {Header} from './(components)/header/header';
-import {Footer} from "./(components)/footer";
+import {Footer} from "./(components)/footer/footer";
 import {Main} from "./(components)/main/main";
 import {Left} from "@/app/(components)/leftside/left"
 import styles from './page.module.css'
