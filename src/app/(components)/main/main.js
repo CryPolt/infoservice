@@ -1,52 +1,32 @@
-import style from './main.module.css';
-import {Left} from "@/app/(components)/leftside/left";
+import styles from './main.module.css';
 
 export const Main = () => {
     return (
         <>
-        <main className={style.main}>
-            <section id="introduction">
-                <div className=".container">
-                    <h2>Introduction</h2>
-                    <p>Introductory text about the API and its purpose.</p>
+            <div className={styles.mainSection}>
+                <div className={styles.sectionTitle}>Active Cards</div>
+                <div className={styles.card}>
+                    <div className={styles.statusGreen}></div>
+                    <div className={styles.cardContent}>
+                        This is one of the card subjects
+                    </div>
+                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
                 </div>
-            </section>
-
-            <section id="getting-started" className={style.section}>
-                <div className={style.container}>
-                    <h2>Getting Started</h2>
-                    <p>Steps to get started with the API.</p>
+                <div className={styles.card}>
+                    <div className={styles.statusBlue}></div>
+                    <div className={styles.cardContent}>
+                        This is one of the card subjects 2
+                    </div>
+                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
                 </div>
-            </section>
-
-            <section id="authentication">
-                <div className="container">
-                    <h2>Authentication</h2>
-                    <p>Explanation of authentication methods.</p>
+                <div className={styles.card}>
+                    <div className={styles.statusRed}></div>
+                    <div className={styles.cardContent}>
+                        This is one of the card subjects 3
+                    </div>
+                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
                 </div>
-            </section>
-
-            <section id="endpoints">
-                <div className="container">
-                    <h2>Endpoints</h2>
-                    <p>List of API endpoints and their functionalities.</p>
-                </div>
-            </section>
-
-            <section id="examples">
-                <div className="container">
-                    <h2>Examples</h2>
-                    <p>Code examples demonstrating API usage.</p>
-                </div>
-            </section>
-
-            <section id="resources">
-                <div className="container">
-                    <h2>Resources</h2>
-                    <p>Additional resources such as FAQs, support links, etc.</p>
-                </div>
-            </section>
-        </main>
-            </>
+            </div>
+        </>
     )
 }

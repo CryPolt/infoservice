@@ -1,13 +1,60 @@
-.container {
-    width: 80%;
+.mainSection {
+    flex: 1;
+    padding: 50px 400px;
+    background: #f6f9fc;
+    display: flex;
+    height: 900px;
     margin: 0 auto;
-    padding: 20px;
+
+
 }
 
-.main {
-    background-color: #fff;
-    padding: 20px;
+.sectionTitle {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #3a3a63;
 }
-.section {
-    margin-bottom: 30px;
+
+.card {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: block;
+    height: 100px;
+    margin-left: 2em;
+
+}
+
+.cardContent {
+    color: #32325d;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.author {
+    color: #999999;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.statusGreen, .statusBlue, .statusRed {
+    width: 30px;
+    height: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.statusGreen {
+    background: #23d2ac;
+}
+
+.statusBlue {
+    background: #33adff;
+}
+
+.statusRed {
+    background: red;
 }

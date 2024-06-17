@@ -10,7 +10,7 @@ export default async function Home() {
       <>
           <Header/>
 
-          <div className={styles.container}>
+          <div style={{ display: 'flex' }}>
               <Left/>
               <Main/>
           </div>
