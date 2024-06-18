@@ -1,34 +1,11 @@
 import styles from './main.module.css';
+import {Cards} from "@/app/(components)/main/cards";
 
 export const Main = () => {
     return (
-        <>
-            <div className={styles.main}>
             <div className={styles.mainSection}>
-                <div className={styles.sectionTitle}>Active Cards</div>
-                <div className={styles.card}>
-                    <div className={styles.statusGreen}></div>
-                    <div className={styles.cardContent}>
-                        This is one of the card subjects
-                    </div>
-                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.statusBlue}></div>
-                    <div className={styles.cardContent}>
-                        This is one of the card subjects 2
-                    </div>
-                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.statusRed}></div>
-                    <div className={styles.cardContent}>
-                        This is one of the card subjects 3
-                    </div>
-                    <div className={styles.author}><i className="fa fa-user-circle-o" aria-hidden="true"></i></div>
-                </div>
+                <Cards />
             </div>
-            </div>
-        </>
+
     )
 }

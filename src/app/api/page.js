@@ -1,5 +1,17 @@
-// import Test from './test';
-//
-export default async function GET(request) {
-    return 'hello'
+import { NextResponse } from "next/server";
+import pool from "@/app/lib/db";
+
+export async function GET() {
+    try {
+        const db = await pool.getConnection()
+        const query = 'select * from account'
+        const [rows] = await db.execute(query)
+        db.release()
+
+        return NextResponse.json(rows)
+    } catch (error) {
+        return NextResponse.json({
+            error: error
+        }, { status: 500 })
+    }
 }

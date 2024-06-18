@@ -1,20 +1,33 @@
-"use client";
+"use client"
+import { useState, useEffect } from 'react';
 import style from '../service.module.css';
 import { Header } from '@/app/(components)/header/header';
-import { useState } from 'react';
 
-export default function create() {
+export default function CreateService() {
     const [modalOpen, setModalOpen] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
-    const [newItem, setNewItem] = useState({ title: '', info: '' });
-    const [currentItem, setCurrentItem] = useState(null);
-    const [portfolioItems, setPortfolioItems] = useState([
-        { title: 'Service Name', info: 'Service info' },
-        { title: 'Service Name', info: 'Service info' }
-    ]);
+    const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 1 });
+    const [portfolioItems, setPortfolioItems] = useState([]);
 
-    const openModal = (item) => {
-        setCurrentItem(item);
+    useEffect(() => {
+        // Fetch existing services when component mounts
+        fetchPortfolioItems();
+    }, []);
+
+    const fetchPortfolioItems = async () => {
+        try {
+            const response = await fetch('/api/service');
+            if (!response.ok) {
+                throw new Error('Failed to fetch services');
+            }
+            const data = await response.json();
+            setPortfolioItems(data);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
+
+    const openModal = () => {
         setModalOpen(true);
     };
 
@@ -35,11 +48,38 @@ export default function create() {
         setNewItem(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setPortfolioItems(prevState => [...prevState, newItem]);
-        setNewItem({ title: '', info: '' });
-        closeForm();
+
+        try {
+            const response = await fetch('/api/service/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: newItem.title,
+                    description: newItem.description,
+                    isactive: newItem.isactive,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create service');
+            }
+
+            const data = await response.json();
+            console.log('New service created:', data);
+
+            // Update portfolioItems with the newly created service
+            setPortfolioItems(prevItems => [...prevItems, data]);
+
+            // Optionally, reset form fields and close form after successful creation
+            setNewItem({ title: '', description: '', isactive: 1 });
+            closeForm();
+        } catch (error) {
+            console.error('Error creating service:', error);
+        }
     };
 
     return (
@@ -47,12 +87,12 @@ export default function create() {
             <Header />
             <div className={style.portfolio}>
                 <ul>
-                    {portfolioItems.map((item, index) => (
-                        <li key={index} onClick={() => openModal(item)}>
+                    {portfolioItems.map(item => (
+                        <li key={item.id} onClick={() => openModal(item)}>
                             <div className={style.caption}>
                                 <i className="fa fa-pencil fa-lg"></i>
                                 <h1>{item.title}</h1>
-                                <p>{item.info}</p>
+                                <p>{item.description}</p>
                             </div>
                         </li>
                     ))}
@@ -60,12 +100,12 @@ export default function create() {
                 <button onClick={openForm}>Add Service</button>
             </div>
 
-            {modalOpen && currentItem && (
+            {modalOpen && (
                 <div className={style.modal}>
                     <div className={style.modalContent}>
                         <span className={style.close} onClick={closeModal}>&times;</span>
-                        <h2>{currentItem.title}</h2>
-                        <p>{currentItem.info}</p>
+                        <h2>{newItem.title}</h2>
+                        <p>{newItem.description}</p>
                     </div>
                 </div>
             )}
@@ -87,13 +127,25 @@ export default function create() {
                             </label>
                             <br />
                             <label>
-                                Info:
+                                Description:
                                 <input
                                     type="text"
-                                    name="info"
-                                    value={newItem.info}
+                                    name="description"
+                                    value={newItem.description}
                                     onChange={handleInputChange}
                                 />
+                            </label>
+                            <br />
+                            <label>
+                                Active:
+                                <select
+                                    name="isactive"
+                                    value={newItem.isactive}
+                                    onChange={handleInputChange}
+                                >
+                                    <option value={1}>Active</option>
+                                    <option value={0}>Inactive</option>
+                                </select>
                             </label>
                             <br />
                             <button type="submit">Add</button>
@@ -104,107 +156,3 @@ export default function create() {
         </>
     );
 }
-
-export const V = () => {
-
-    const [modalOpen, setModalOpen] = useState(false);
-    const [formOpen, setFormOpen] = useState(false);
-    const [newItem, setNewItem] = useState({ title: '', info: '' });
-    const [currentItem, setCurrentItem] = useState(null);
-    const [portfolioItems, setPortfolioItems] = useState([
-        { title: 'Service Name', info: 'Service info' },
-        { title: 'Service Name', info: 'Service info' }
-    ]);
-
-    const openModal = (item) => {
-        setCurrentItem(item);
-        setModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setModalOpen(false);
-    };
-
-    const openForm = () => {
-        setFormOpen(true);
-    };
-
-    const closeForm = () => {
-        setFormOpen(false);
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewItem(prevState => ({ ...prevState, [name]: value }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setPortfolioItems(prevState => [...prevState, newItem]);
-        setNewItem({ title: '', info: '' });
-        closeForm();
-    };
-
-    return (
-        <>
-            <div className={style.portfolio}>
-
-            <button onClick={openForm}>Add Service</button>
-            <ul>
-                    {portfolioItems.map((item, index) => (
-                        <li key={index} onClick={() => openModal(item)}>
-                            <div className={style.caption}>
-                                <i className="fa fa-pencil fa-lg"></i>
-                                <h1>{item.title}</h1>
-                                <p>{item.info}</p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            {modalOpen && currentItem && (
-                <div className={style.modal}>
-                    <div className={style.modalContent}>
-                        <span className={style.close} onClick={closeModal}>&times;</span>
-                        <h2>{currentItem.title}</h2>
-                        <p>{currentItem.info}</p>
-                    </div>
-                </div>
-            )}
-
-            {formOpen && (
-                <div className={style.modal}>
-                    <div className={style.modalContent}>
-                        <span className={style.close} onClick={closeForm}>&times;</span>
-                        <h2>Add Service</h2>
-                        <form onSubmit={handleSubmit}>
-                            <label>
-                                Title:
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={newItem.title}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Info:
-                                <input
-                                    type="text"
-                                    name="info"
-                                    value={newItem.info}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <button type="submit">Add</button>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-
-};

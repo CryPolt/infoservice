@@ -9,12 +9,11 @@ export default async function Home() {
   return (
       <>
           <Header/>
-
           <div style={{ display: 'flex' }}>
               <Left/>
               <Main/>
           </div>
-          <Footer/>
+          {/*<Footer/>*/}
       </>
   );
 }

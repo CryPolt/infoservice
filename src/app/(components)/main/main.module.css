@@ -14,15 +14,21 @@
 @media (min-width: 768px) {
     .mainSection {
         padding: 50px;
-        height: 600px;
+        height: 100em;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
     }
 }
 
+
 .sectionTitle {
+    margin-top: 0;
     margin-bottom: 20px;
     font-size: 24px;
     color: #3a3a63;
-    text-align: center
+    text-align: center;
+    width: 400px;
 ;
 }
 
