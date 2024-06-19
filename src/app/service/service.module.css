@@ -98,3 +98,10 @@
     background-color: rgba(0, 0, 0, 0.1); /* Light color to make polygons visible */
     border: 1px solid black; /* Border to make polygons visible */
 }
+
+.err {
+
+    background-color: red;
+    font-size: bold 20px;
+}
+

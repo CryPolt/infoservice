@@ -1,123 +1,49 @@
 "use client"
-import { useState, useCallback, useEffect } from 'react';
-import ReactFlow, {
-    Controls,
-    Background,
-    applyNodeChanges,
-    applyEdgeChanges,
-    addEdge,
-    useReactFlow,
-    Panel,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+import React, { useEffect } from 'react';
+import * as go from 'gojs'; // Importing GoJS under the alias 'go'
 
-const flowKey = 'example-flow';
-const flowDataFile = '/flow-data.json'; // Name of your JSON file
+export const GoJSDiagram = () => {
+  useEffect(() => {
+    const $ = go.GraphObject.make;
 
-const getNodeId = () => `randomnode_${+new Date()}`; // Generate a unique ID for new nodes
+    // Initialize the main diagram
+    const myDiagram = $(go.Diagram, 'myDiagramDiv', {
+      'undoManager.isEnabled': true // Enable undo/redo if needed
+    });
 
-// Initial nodes and edges - you can customize these based on your flow
-const initialNodes = [];
+    // Define node template for the diagram
+    myDiagram.nodeTemplate =
+      $(go.Node, 'Auto', { locationSpot: go.Spot.Center },
+        $(go.Shape, 'RoundedRectangle', { fill: 'white', portId: '', fromLinkable: true, toLinkable: true }),
+        $(go.TextBlock, { margin: 8 }, new go.Binding('text', 'name'))
+      );
 
-const initialEdges = [];
+    // Initialize the model
+    myDiagram.model = new go.GraphLinksModel([
+      { key: 1, name: 'Alpha', loc: '0 0' },
+      { key: 2, name: 'Beta', loc: '150 0' },
+      { key: 3, name: 'Gamma', loc: '0 150' }
+    ]);
 
-export const FlowEditor = () => {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
-    const [rfInstance, setRfInstance] = useState(null);
+    // Example diagram listener
+    myDiagram.addDiagramListener('ChangedSelection', function(e) {
+      console.log('Selection changed:', e.subject);
+    });
 
-    const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [],
-    );
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [],
-    );
-    const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
-        [],
-    );
+    // Clean-up function
+    return () => {
+      myDiagram.div = null; // Remove reference to div to clean up properly
+      myDiagram.removeDiagramListener('ChangedSelection'); // Remove the listener when component unmounts
+      myDiagram.clear(); // Clear the diagram contents
+    };
+  }, []); // Empty dependency array ensures this effect runs only once
 
-    const onSave = useCallback(() => {
-        if (rfInstance) {
-            const flow = rfInstance.toObject();
-            saveFlowToJsonFile(flow, flowDataFile);
-        }
-    }, [rfInstance]);
-
-    const onRestore = useCallback(() => {
-        loadFlowFromJSONFile(flowDataFile)
-            .then((flow) => {
-                if (flow) {
-                    setNodes(flow.nodes || []);
-                    setEdges(flow.edges || []);
-
-                    if (rfInstance) {
-                        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-                        rfInstance.setViewport({ x, y, zoom });
-                    }
-                }
-            });
-    }, [setNodes, rfInstance]);
-
-    const onAdd = useCallback(() => {
-        const newNode = {
-            id: getNodeId(),
-            data: { label: 'Added Node' },
-            position: {
-                x: Math.random() * window.innerWidth - 100,
-                y: Math.random() * window.innerHeight - 200,
-            },
-        };
-        setNodes((nds) => nds.concat(newNode));
-    }, [setNodes]);
-
-    // Load flow data from JSON file on component mount
-    useEffect(() => {
-        onRestore();
-    }, [onRestore]);
-
-    return (
-        <div style={{width: '1000px', height: '1000px'}}>
-            <ReactFlow
-                nodes={nodes}
-                onNodesChange={onNodesChange}
-                edges={edges}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                fitView
-                onInit={setRfInstance}
-            >
-                <Background />
-                <Controls />
-                <Panel position="top-right">
-                    <button onClick={onSave}>save</button>
-                    <button onClick={onRestore}>restore</button>
-                    <button onClick={onAdd}>add node</button>
-                </Panel>
-            </ReactFlow>
-        </div>
-    );
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* Main Diagram */}
+      <div id="myDiagramDiv" style={{ flexGrow: 1, height: '100%', border: 'solid 1px black' }} />
+    </div>
+  );
 };
 
-// **File API Implementation**
-const saveFlowToJsonFile = (flow, fileName) => {
-    const data = JSON.stringify(flow);
-    localStorage.setItem(fileName, data); // Store in local storage for demo
-    alert('Flow saved successfully!'); // Notify user
-};
-
-
-const loadFlowFromJSONFile = async (fileName) => {
-    try {
-
-        const response = await fetch(fileName);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error loading flow data:', error);
-        return null;
-    }
-};
-
+export default GoJSDiagram;

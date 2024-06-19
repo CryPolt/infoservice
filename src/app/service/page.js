@@ -9,6 +9,7 @@ export default function Service() {
     const [modalOpen, setModalOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
     const [portfolioItems, setPortfolioItems] = useState([]);
+    const [error, setError] = useState(null); // State to store error
 
     useEffect(() => {
         // Function to fetch data from API
@@ -21,11 +22,13 @@ export default function Service() {
                 const data = await response.json();
                 if (data.status === 200) {
                     setPortfolioItems(data.body); // Update state with fetched data
+                    setError(null); // Clear any previous error
                 } else {
                     throw new Error('Failed to fetch data');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setError(error.message); // Set error state
             }
         };
 
@@ -45,17 +48,21 @@ export default function Service() {
         <>
             <Header />
             <div className={style.portfolio}>
-                <ul>
-                    {portfolioItems.map((item) => (
-                        <li key={item.id} onClick={() => openModal(item)}>
-                            <div className={style.caption}>
-                                <i className="fa fa-pencil fa-lg"></i>
-                                <h1>{item.title}</h1>
-                                <p>{item.description}</p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                {error ? (
+                    <div className={style.err}>Error fetching data: {error}</div>
+                ) : (
+                    <ul>
+                        {portfolioItems.map((item) => (
+                            <li key={item.id} onClick={() => openModal(item)}>
+                                <div className={style.caption}>
+                                    <i className="fa fa-pencil fa-lg"></i>
+                                    <h1>{item.title}</h1>
+                                    <p>{item.description}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
 
             {modalOpen && currentItem && (
