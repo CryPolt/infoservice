@@ -1,0 +1,109 @@
+.dashboard {
+    padding: 20px;
+    background-color: #2a2a2a;
+    width: 100%;
+    margin: 0 auto;
+    color: white; /* Adjust text color */
+}
+
+.servicesTable {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr; /* Adjust column widths as needed */
+    gap: 10px;
+    font-weight: bold;
+    background-color: #444;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 3fr 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 8px;
+    height: 30px;
+    overflow: hidden;
+}
+
+.column {
+    padding: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.deleteButton {
+    background-color: #d00355;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+    background-color: #b3003d;
+}
+
+.editButton {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 20px;
+}
+
+.editButton:hover {
+    background-color: #444;
+}
+
+/*const handleDelete = async (id) => {*/
+/*        try {*/
+/*            await deleteService(id);*/
+/*            // Handle success (if needed), update state or refetch services*/
+/*        } catch (error) {*/
+/*            console.error('Error deleting service:', error);*/
+/*            // Handle errors, possibly show an error message to the user*/
+/*        }*/
+/*    };*/
+
+/*    const handleEdit = async (id) => {*/
+/*        // Example implementation for editing, adjust as per your requirement*/
+/*        const newTitle = prompt('Enter new title:');*/
+/*        const newDescription = prompt('Enter new description:');*/
+
+/*        if (newTitle && newDescription) {*/
+/*            try {*/
+/*                const response = await fetch('api/service/edit', {*/
+/*                    method: 'PUT',*/
+/*                    headers: {*/
+/*                        'Content-Type': 'application/json',*/
+/*                    },*/
+/*                    body: JSON.stringify({ id, title: newTitle, description: newDescription }),*/
+/*                });*/
+
+/*                if (!response.ok) {*/
+/*                    throw new Error('Network response was not ok');*/
+/*                }*/
+
+/*                const data = await response.json();*/
+/*                console.log('Service updated successfully:', data.message);*/
+/*                // Optionally, you can update the state or trigger a refetch of services*/
+/*            } catch (error) {*/
+/*                console.error('Error updating service:', error);*/
+/*            }*/
+/*        }*/

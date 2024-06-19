@@ -21,9 +21,15 @@ export default function CreateService() {
                 throw new Error('Failed to fetch services');
             }
             const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error('Invalid data format');
+            }
+
             setPortfolioItems(data);
         } catch (error) {
             console.error('Error fetching services:', error);
+            setPortfolioItems([]); // Ensure it's an array even on error
         }
     };
 
@@ -64,11 +70,12 @@ export default function CreateService() {
                 }),
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error('Failed to create service');
+                throw new Error(data.error || 'Failed to create service');
             }
 
-            const data = await response.json();
             console.log('New service created:', data);
 
             // Update portfolioItems with the newly created service
@@ -79,8 +86,10 @@ export default function CreateService() {
             closeForm();
         } catch (error) {
             console.error('Error creating service:', error);
+            alert(error.message); // Show the error message to the user
         }
     };
+
 
     return (
         <>

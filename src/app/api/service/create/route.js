@@ -1,35 +1,59 @@
 import pool from '../../../lib/db';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req, res) {
+export async function POST(req) {
+    console.log("Received a POST request");
+
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
+        console.log("Method Not Allowed");
+        return NextResponse.json({ error: 'Method Not Allowed' }, { status: 405 });
     }
 
     try {
-        const { title, description, isactive } = req.body;
+        const body = await req.json();
+        const { title, description, isactive } = body;
 
-        // Simple validation
+        console.log("Request Body:", body);
+
         if (!title || !description || typeof isactive !== 'number') {
-            return res.status(400).json({ error: 'Invalid request format' });
+            console.log("Invalid request format:", { title, description, isactive });
+            return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
         }
 
         const connection = await pool.getConnection();
-        const result = await connection.query(
+
+        console.log("Checking if the service already exists");
+        const [rows] = await connection.query(
+            'SELECT COUNT(*) AS count FROM service WHERE title = ? AND description = ?',
+            [title, description]
+        );
+        const count = rows[0].count;
+        console.log("Service count found:", count);
+
+        if (count > 0) {
+            connection.release();
+            console.log("Service already exists");
+            return NextResponse.json({ error: 'Service already exists' }, { status: 409 });
+        }
+
+        console.log("Inserting new service");
+        const [result] = await connection.query(
             'INSERT INTO service (title, description, isactive) VALUES (?, ?, ?)',
             [title, description, isactive]
         );
         connection.release();
 
-        const newServiceId = result[0].insertId;
+        console.log("Service created with ID:", result.insertId);
 
-        res.status(201).json({
-            id: newServiceId,
+        return NextResponse.json({
+            id: result.insertId,
             title,
             description,
             isactive
-        });
+        }, { status: 201 });
+
     } catch (error) {
         console.error('Error creating service:', error);
-        res.status(500).json({ error: 'Error creating service' });
+        return NextResponse.json({ error: 'Error creating service' }, { status: 500 });
     }
 }
