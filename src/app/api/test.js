@@ -7,6 +7,6 @@ export default async function handler(req, res) {
         res.status(200).json({ users: rows });
     } catch (err) {
         console.error('Error handling request:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error:'Internal Server Error' });
     }
 }

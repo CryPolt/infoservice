@@ -8,7 +8,7 @@ export async function GET({ params }) {
         if (!userId) {
             return NextResponse.json({
                 status: 400,
-                body: { error: 'Не указан id пользователя' }
+                body: { error:'Не указан id пользователя' }
             });
         }
         const connection = await pool.getConnection();

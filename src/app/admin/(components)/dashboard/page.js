@@ -56,7 +56,7 @@ export const Dashboard = () => {
     
 
     const handleEdit = async (id) => {
-        const newTitle = prompt('Enter new title:');
+        const newTitle = prompt('Ente new title:');
         const newDescription = prompt('Enter new description:');
     
         if (newTitle && newDescription) {

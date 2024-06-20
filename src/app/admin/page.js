@@ -8,7 +8,7 @@ export default function Admin() {
                 <h1>Admin Page</h1>
                 {/* Можно добавить другие элементы, если нужно */}
             </div>
-            <Dashboard />
+            <Dashboard/>
         </>
     );
 }

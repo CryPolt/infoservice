@@ -66,7 +66,7 @@ export default function CreateService() {
                 body: JSON.stringify({
                     title: newItem.title,
                     description: newItem.description,
-                    isactive: newItem.isactive,
+                    isactive:newItem.isactive,
                 }),
             });
 

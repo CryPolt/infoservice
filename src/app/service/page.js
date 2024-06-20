@@ -57,7 +57,7 @@ export default function Service() {
                                 <div className={style.caption}>
                                     <i className="fa fa-pencil fa-lg"></i>
                                     <h1>{item.title}</h1>
-                                    <p>{item.description}</p>
+                                    <p> {item.description}</p>
                                 </div>
                             </li>
                         ))}
