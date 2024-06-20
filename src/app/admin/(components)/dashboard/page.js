@@ -26,11 +26,11 @@ const useClient = (endpoint) => {
             });
     }, [endpoint]);
 
-    return { data, loading, error };
+    return { data, setData, loading, error };
 };
 
 export const Dashboard = () => {
-    const { data: services, loading, error } = useClient('/api/service');
+    const { data: services, setData: setServices, loading, error } = useClient('/api/service');
 
     const handleDelete = async (id) => {
         try {
@@ -39,23 +39,26 @@ export const Dashboard = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete service');
+                throw new Error(`Failed to delete service: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json();
             console.log('Service deleted successfully:', data.message);
-
-            // Опционально: обновление состояния или повторное получение сервисов
+            
+            // Update services state with the new list of services returned from the DELETE request
+            setServices(data.services);
+            
         } catch (error) {
             console.error('Error deleting service:', error);
             alert('Failed to delete service. Please try again.');
         }
     };
+    
 
     const handleEdit = async (id) => {
         const newTitle = prompt('Enter new title:');
         const newDescription = prompt('Enter new description:');
-
+    
         if (newTitle && newDescription) {
             try {
                 const response = await fetch('/api/service/edit', {
@@ -65,17 +68,32 @@ export const Dashboard = () => {
                     },
                     body: JSON.stringify({ id, title: newTitle, description: newDescription }),
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-
+    
                 const data = await response.json();
                 console.log('Service updated successfully:', data.message);
 
-                // Optionally, update state or refetch services if needed
+                // Refetch the updated list of services
+                fetch('/api/service')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        setServices(data.body || []);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+    
             } catch (error) {
                 console.error('Error updating service:', error);
+                alert('Failed to update service. Please try again.');
             }
         }
     };

@@ -1,29 +1,18 @@
-// api/service/delete.js
+// src/app/api/service/delete/route.js
 
 import pool from '../../../lib/db';
 import { NextResponse } from 'next/server';
 
-// Define the DELETE handler
 export async function DELETE(req) {
-    console.log("Received a DELETE request for deleting a service");
-
-    if (req.method !== 'DELETE') {
-        console.log("Method Not Allowed");
-        return NextResponse.json({ error: 'Method Not Allowed' }, { status: 405 });
-    }
-
     try {
-        const id = req.query.id; // Используйте req.query.id для извлечения параметра id
-
-        console.log("Request Query:", req.query);
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
 
         if (!id) {
-            console.log("Invalid request format: id is missing");
-            return NextResponse.json({ error: 'Invalid request format: id is missing' }, { status: 400 });
+            return NextResponse.json({ error: 'ID parameter is missing' }, { status: 400 });
         }
 
         const connection = await pool.getConnection();
-        console.log("Database connection established");
 
         // Check if the service exists
         const [rows] = await connection.query(
@@ -31,11 +20,9 @@ export async function DELETE(req) {
             [id]
         );
         const count = rows[0].count;
-        console.log("Service count found:", count);
 
         if (count === 0) {
             connection.release();
-            console.log("Service not found with ID:", id);
             return NextResponse.json({ error: 'Service not found' }, { status: 404 });
         }
 
@@ -44,11 +31,12 @@ export async function DELETE(req) {
             'DELETE FROM service WHERE id = ?',
             [id]
         );
-        connection.release();
-        
-        console.log("Service deleted with ID:", id);
 
-        return NextResponse.json({ message: 'Service deleted successfully' }, { status: 200 });
+        // Fetch the updated list of services
+        const [updatedRows] = await connection.query('SELECT * FROM service');
+        connection.release();
+
+        return NextResponse.json({ message: 'Service deleted successfully', services: updatedRows }, { status: 200 });
 
     } catch (error) {
         console.error('Error deleting service:', error);
