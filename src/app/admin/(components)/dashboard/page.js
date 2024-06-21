@@ -45,7 +45,6 @@ export const Dashboard = () => {
             const data = await response.json();
             console.log('Service deleted successfully:', data.message);
             
-            // Update services state with the new list of services returned from the DELETE request
             setServices(data.services);
             
         } catch (error) {
