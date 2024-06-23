@@ -1,8 +1,33 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/lib/*": ["lib/*"]
-    }
-  }
+    /* Type Checking */
+    "strict": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    /* Modules */
+    "baseUrl": ".",
+    /* Emit */
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSourceMap": true,
+    "outDir": "dist",
+    /* Interop Constraints */
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    /* Language and Environment */
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "target": "ES2020",
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

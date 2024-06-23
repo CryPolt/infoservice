@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Scheme 1",
+    "description": "Description of scheme 1",
+    "imageUrl": "https://example.com/scheme1.png"
+  },
+  {
+    "id": 2,
+    "name": "Scheme 2",
+    "description": "Description of scheme 2",
+    "imageUrl": "https://example.com/scheme2.png"
+  },
+  {
+    "id": 3,
+    "name": "Scheme 3",
+    "description": "Description of scheme 3",
+    "imageUrl": "https://example.com/scheme3.png"
+  }
+]

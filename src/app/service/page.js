@@ -1,8 +1,9 @@
 "use client";
 import style from './service.module.css';
-import { Header } from '@/app/(components)/header/header';
+import { Header } from '../../app/(components)/header/header';
 import { useState, useEffect } from 'react';
 import Image from "next/image";
+import Link from 'next/link';
 import sc from "../../../public/sc.svg";
 
 export default function Service() {
@@ -71,11 +72,10 @@ export default function Service() {
                         <span className={style.close} onClick={closeModal}>&times;</span>
                         <h2>{currentItem.title}</h2>
                         <p>{currentItem.description}</p>
-                        <Image
-                            src={sc}
-                            alt=''
-                            width={200} // Adjust dimensions as per your requirement
-                            height={200} />
+                        <Link href={`/service/${currentItem.id}`}>
+                            <strong>Посмотреть документацию сервиса</strong>
+                        </Link>
+
                     </div>
                 </div>
             )}

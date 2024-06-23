@@ -1,5 +1,5 @@
 import styles from './main.module.css';
-import {Cards} from "@/app/(components)/main/cards";
+import {Cards} from "./cards";
 
 export const Main = () => {
     return (

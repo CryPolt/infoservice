@@ -1,11 +1,13 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Dashboard } from "@/app/admin/(components)/dashboard/page";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+"use client"
+import { useEffect, useState, useRef } from "react";
+import mx from "mxgraph";
+import Dashboard from "./(components)/dashboard/page";
+import Schem from "./(components)/scheme/page";
 
 export default function Admin() {
     const [xmlData, setXmlData] = useState(null);
+    const containerRef = useRef(null);
+    const [graph, setGraph] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -15,8 +17,7 @@ export default function Admin() {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setXmlData(data);
-                console.log(data);
+                setXmlData(data.xml); // Assuming data structure has a 'xml' key
             } catch (err) {
                 console.error('Error fetching data:', err);
             }
@@ -25,19 +26,16 @@ export default function Admin() {
         fetchData();
     }, []);
 
+
     return (
         <>
             <div>
                 <h1>Admin Page</h1>
-                {xmlData ? (
-                    <SyntaxHighlighter language="xml" style={vscDarkPlus}>
-                        {new XMLSerializer().serializeToString(new DOMParser().parseFromString(xmlData.mxfile.$.diagram, "text/xml"))}
-                    </SyntaxHighlighter>
-                ) : (
-                    <p>Loading...</p>
-                )}
             </div>
             <Dashboard />
+
+            <Schem />
+
         </>
     );
 }

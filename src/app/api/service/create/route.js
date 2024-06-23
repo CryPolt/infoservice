@@ -46,6 +46,7 @@ export async function POST(req) {
         console.log("Service created with ID:", result.insertId);
 
         return NextResponse.json({
+            success: true,
             id: result.insertId,
             title,
             description,

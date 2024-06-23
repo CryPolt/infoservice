@@ -1,0 +1,87 @@
+.scheme {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.side {
+    flex: 1;
+}
+
+.onLeft {
+    text-align: right;
+}
+
+.onCenter {
+    text-align: center;
+}
+
+.onRight {
+    text-align: left;
+}
+
+.elem {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.elem:hover {
+    background-color: #2980b9;
+}
+
+.line {
+    position: absolute;
+    background-color: #c0392b; /* красный цвет для стрелок */
+}
+
+.lineTopLeft {
+    width: 2px;
+    height: 50%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.lineBottomLeft {
+    width: 2px;
+    height: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.lineCenter {
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.lineBottomRight {
+    width: 2px;
+    height: 50%;
+    bottom: 0;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.lineTopRight {
+    width: 2px;
+    height: 50%;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+}

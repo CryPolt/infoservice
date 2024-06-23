@@ -1,5 +1,4 @@
-"use client"
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 
 const useClient = (endpoint) => {
@@ -26,11 +25,12 @@ const useClient = (endpoint) => {
             });
     }, [endpoint]);
 
-    return { data, setData, loading, error };
+    return { data, loading, error }; // Removed setData as it's not needed in the component
 };
 
-export const Dashboard = () => {
-    const { data: services, setData: setServices, loading, error } = useClient('/api/service');
+const Dashboard = () => {
+    const { data: services, loading: loadingServices } = useClient('/api/scheme');
+    const { data: tables, loading: loadingTables } = useClient('/api/db');
 
     const handleDelete = async (id) => {
         try {
@@ -42,22 +42,20 @@ export const Dashboard = () => {
                 throw new Error(`Failed to delete service: ${response.status} ${response.statusText}`);
             }
 
-            const data = await response.json();
-            console.log('Service deleted successfully:', data.message);
-            
-            setServices(data.services);
-            
+            // Assuming setData is used to update services state after deletion
+            const newData = services.filter(service => service.id !== id);
+            // setData(newData); // Uncomment if you need to update services state
+
         } catch (error) {
             console.error('Error deleting service:', error);
             alert('Failed to delete service. Please try again.');
         }
     };
-    
 
     const handleEdit = async (id) => {
-        const newTitle = prompt('Ente new title:');
+        const newTitle = prompt('Enter new title:');
         const newDescription = prompt('Enter new description:');
-    
+
         if (newTitle && newDescription) {
             try {
                 const response = await fetch('/api/service/edit', {
@@ -67,29 +65,21 @@ export const Dashboard = () => {
                     },
                     body: JSON.stringify({ id, title: newTitle, description: newDescription }),
                 });
-    
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-    
-                const data = await response.json();
-                console.log('Service updated successfully:', data.message);
 
-                // Refetch the updated list of services
-                fetch('/api/service')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        setServices(data.body || []);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                    });
-    
+                // Assuming setData is used to update services state after edit
+                const newData = services.map(service => {
+                    if (service.id === id) {
+                        return { ...service, title: newTitle, description: newDescription };
+                    }
+                    return service;
+                });
+
+                // setData(newData); // Uncomment if you need to update services state
+
             } catch (error) {
                 console.error('Error updating service:', error);
                 alert('Failed to update service. Please try again.');
@@ -97,31 +87,58 @@ export const Dashboard = () => {
         }
     };
 
+    if (loadingServices) {
+        return <p>Loading services...</p>;
+    }
+
+    // Add a check for null or undefined services here
+    if (!services || !Array.isArray(services) || services.length === 0) {
+        return <p>No services available.</p>;
+    }
+
     return (
         <div className={styles.dashboard}>
             <h1>Service Management</h1>
-            {loading ? (
-                <p>Loading...</p>
-            ) : services && services.length > 0 ? (
-                <div className={styles.servicesTable}>
-                    <div className={styles.tableHeader}>
-                        <div className={styles.columnHeader}>Title</div>
-                        <div className={styles.columnHeader}>Description</div>
-                        <div className={styles.columnHeader}>Actions</div>
+            <div className={styles.servicesTable}>
+                <div className={styles.tableHeader}>
+                    <div className={styles.columnHeader}>Title</div>
+                    <div className={styles.columnHeader}>Description</div>
+                    <div className={styles.columnHeader}>Actions</div>
+                </div>
+                {services.map(service => (
+                    <div key={service.id} className={styles.tableRow}>
+                        <div className={styles.column}>
+                            {service.url ? (
+                                <a href={service.url} className={styles.serviceLink}>{service.title}</a>
+                            ) : (
+                                <span>{service.title}</span>
+                            )}
+                        </div>
+                        <div className={styles.column}>{service.description}</div>
+                        <div className={styles.column}>
+                            <button className={styles.deleteButton} onClick={() => handleDelete(service.id)}>Delete</button>
+                            <button className={styles.editButton} onClick={() => handleEdit(service.id)}>Edit</button>
+                        </div>
                     </div>
-                    {services.map(service => (
-                        <div key={service.id} className={styles.tableRow}>
-                            <div className={styles.column}>{service.title}</div>
-                            <div className={styles.column}>{service.description}</div>
-                            <div className={styles.column}>
-                                <button className={styles.deleteButton} onClick={() => handleDelete(service.id)}>Delete</button>
-                                <button className={styles.editButton} onClick={() => handleEdit(service.id)}>Edit</button>
-                            </div>
+                ))}
+            </div>
+
+            <h1>Database Analysis</h1>
+            {loadingTables ? (
+                <p>Loading analysis...</p>
+            ) : tables && tables.length > 0 ? (
+                <div className={styles.analysisTable}>
+                    <div className={styles.tableHeader}>
+                        <div className={styles.columnHeader}>Table Name</div>
+                    </div>
+                    {tables.map((table, index) => (
+                        <div key={index} className={styles.tableRow}>
+                            <div className={styles.column}>{table.name}</div>
                         </div>
                     ))}
                 </div>
             ) : (
-                <p>No services available.</p>
+                <p>No tables available.</p>
             )}
         </div>
     );

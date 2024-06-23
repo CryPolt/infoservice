@@ -1,6 +1,8 @@
-:root{
-  background-color: #445;
-  overflow: hidden;
+:root {
+  --row-gap: 1.2rem;
+  --elem-gap: 0.5rem;
+  --border-as-line: 1px solid #aaa;
+  background-color: #666666;
 }
 
 *{box-sizing: border-box}
