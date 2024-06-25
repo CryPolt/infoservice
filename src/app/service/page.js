@@ -1,19 +1,16 @@
-"use client";
+"use client"
 import style from './service.module.css';
-import { Header } from '../../app/(components)/header/header';
+import { Header } from '../(components)/header/header';
 import { useState, useEffect } from 'react';
-import Image from "next/image";
 import Link from 'next/link';
-import sc from "../../../public/sc.svg";
 
 export default function Service() {
     const [modalOpen, setModalOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
     const [portfolioItems, setPortfolioItems] = useState([]);
-    const [error, setError] = useState(null); // State to store error
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Function to fetch data from API
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/service');
@@ -22,19 +19,20 @@ export default function Service() {
                 }
                 const data = await response.json();
                 if (data.status === 200) {
-                    setPortfolioItems(data.body); // Update state with fetched data
-                    setError(null); // Clear any previous error
+                    const activeServices = data.body.filter(item => item.isactive === 1);
+                    setPortfolioItems(activeServices);
+                    setError(null);
                 } else {
                     throw new Error('Failed to fetch data');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setError(error.message); // Set error state
+                setError(error.message);
             }
         };
 
-        fetchData(); // Call the fetchData function when component mounts
-    }, []); // Empty dependency array ensures this effect runs only once
+        fetchData();
+    }, []);
 
     const openModal = (item) => {
         setCurrentItem(item);
@@ -58,7 +56,7 @@ export default function Service() {
                                 <div className={style.caption}>
                                     <i className="fa fa-pencil fa-lg"></i>
                                     <h1>{item.title}</h1>
-                                    <p> {item.description}</p>
+                                    <p>{item.description}</p>
                                 </div>
                             </li>
                         ))}
@@ -75,7 +73,6 @@ export default function Service() {
                         <Link href={`/service/${currentItem.id}`}>
                             <strong>Посмотреть документацию сервиса</strong>
                         </Link>
-
                     </div>
                 </div>
             )}

@@ -1,15 +1,18 @@
+// pages/api/service/toggle.js
 import pool from '../../../lib/db';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function PUT(req) {
+    const { id, isactive } = await req.json();
+
     return pool.getConnection()
         .then(connection => {
-            return connection.query('SELECT * FROM service WHERE isactive = 1')
-                .then(([rows]) => {
+            return connection.query('UPDATE service SET isactive = ? WHERE id = ?', [isactive, id])
+                .then(result => {
                     connection.release();
                     return NextResponse.json({
                         status: 200,
-                        body: rows
+                        body: { message: 'Service status updated successfully' }
                     });
                 })
                 .catch(queryError => {

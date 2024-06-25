@@ -4,7 +4,6 @@ import {Main} from "./(components)/main/main";
 import {Left} from "../app/(components)/leftside/left"
 import styles from './page.module.css'
 
-
 export default async function Home() {
   return (
       <>

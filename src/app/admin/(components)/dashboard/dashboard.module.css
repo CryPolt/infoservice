@@ -1,9 +1,15 @@
+
 .dashboard {
     padding: 20px;
     background-color: #2a2a2a;
     width: 100%;
     margin: 0 auto;
-    color: white; /* Adjust text color */
+    color: white;
+}
+
+.columnHeader {
+    background: #000;
+    width: max-content;
 }
 
 .servicesTable {
@@ -13,9 +19,9 @@
 }
 
 .analysisTable {
-    margin-top: 20px; /* Adjust spacing between tables */
+    margin-top: 20px;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr; /* Adjust column widths as needed */
+    grid-template-columns: 1fr 2fr 1fr;
     gap: 10px;
     background-color: #444;
     padding: 10px;
@@ -24,7 +30,7 @@
 
 .tableHeader {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr; /* Adjust column widths as needed */
+    grid-template-columns: 1fr 2fr 1fr 1fr;
     gap: 10px;
     font-weight: bold;
     background-color: #333;
@@ -34,7 +40,6 @@
 
 .tableRow {
     display: grid;
-    grid-template-rows: 1fr;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 10px;
     align-items: center;
@@ -51,7 +56,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     color: white;
-
 }
 
 .deleteButton {
@@ -84,11 +88,60 @@
 }
 
 .serviceLink {
-    color: inherit; /* Inherit text color from parent (.column) */
-    text-decoration: none; /* Remove underline */
+    color: inherit;
+    text-decoration: none;
     cursor: pointer;
 }
 
 .serviceLink:hover {
-    color: #f0f0f0; /* Change color on hover */
+    color: #f0f0f0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    margin-right: 3em;
+    cursor: pointer;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f1f1f1;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
 }

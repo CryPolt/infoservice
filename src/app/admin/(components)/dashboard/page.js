@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 
@@ -25,11 +26,11 @@ const useClient = (endpoint) => {
             });
     }, [endpoint]);
 
-    return { data, loading, error }; // Removed setData as it's not needed in the component
+    return { data, loading, error, setData };
 };
 
 const Dashboard = () => {
-    const { data: services, loading: loadingServices } = useClient('/api/scheme');
+    const { data: services, loading: loadingServices, setData: setServices } = useClient('/api/service');
     const { data: tables, loading: loadingTables } = useClient('/api/db');
 
     const handleDelete = async (id) => {
@@ -42,9 +43,8 @@ const Dashboard = () => {
                 throw new Error(`Failed to delete service: ${response.status} ${response.statusText}`);
             }
 
-            // Assuming setData is used to update services state after deletion
             const newData = services.filter(service => service.id !== id);
-            // setData(newData); // Uncomment if you need to update services state
+            setServices(newData);
 
         } catch (error) {
             console.error('Error deleting service:', error);
@@ -70,7 +70,6 @@ const Dashboard = () => {
                     throw new Error('Network response was not ok');
                 }
 
-                // Assuming setData is used to update services state after edit
                 const newData = services.map(service => {
                     if (service.id === id) {
                         return { ...service, title: newTitle, description: newDescription };
@@ -78,7 +77,7 @@ const Dashboard = () => {
                     return service;
                 });
 
-                // setData(newData); // Uncomment if you need to update services state
+                setServices(newData);
 
             } catch (error) {
                 console.error('Error updating service:', error);
@@ -87,11 +86,41 @@ const Dashboard = () => {
         }
     };
 
+    const handleToggleStatus = async (id, currentStatus) => {
+        const newStatus = currentStatus === 1 ? 0 : 1;
+
+        try {
+            const response = await fetch('/api/service/toggle', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, isactive: newStatus }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const newData = services.map(service => {
+                if (service.id === id) {
+                    return { ...service, isactive: newStatus };
+                }
+                return service;
+            });
+
+            setServices(newData);
+
+        } catch (error) {
+            console.error('Error toggling service status:', error);
+            alert('Failed to toggle service status. Please try again.');
+        }
+    };
+
     if (loadingServices) {
         return <p>Loading services...</p>;
     }
 
-    // Add a check for null or undefined services here
     if (!services || !Array.isArray(services) || services.length === 0) {
         return <p>No services available.</p>;
     }
@@ -103,6 +132,7 @@ const Dashboard = () => {
                 <div className={styles.tableHeader}>
                     <div className={styles.columnHeader}>Title</div>
                     <div className={styles.columnHeader}>Description</div>
+                    <div className={styles.columnHeader}>Status</div>
                     <div className={styles.columnHeader}>Actions</div>
                 </div>
                 {services.map(service => (
@@ -116,6 +146,14 @@ const Dashboard = () => {
                         </div>
                         <div className={styles.column}>{service.description}</div>
                         <div className={styles.column}>
+                            <label className={styles.switch}>
+                                <input
+                                    type="checkbox"
+                                    checked={service.isactive === 1}
+                                    onChange={() => handleToggleStatus(service.id, service.isactive)}
+                                />
+                                <span className={styles.slider}></span>
+                            </label>
                             <button className={styles.deleteButton} onClick={() => handleDelete(service.id)}>Delete</button>
                             <button className={styles.editButton} onClick={() => handleEdit(service.id)}>Edit</button>
                         </div>
