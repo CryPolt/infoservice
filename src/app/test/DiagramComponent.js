@@ -1,26 +1,37 @@
-"use client"
-import React, { useState } from 'react';
+// DiagramViewer.js
 
-const Scheme = ({ scheme }) => {
-    const [showDetails, setShowDetails] = useState(false);
+import React from 'react';
+import styles from './DiagramViewer.module.css';
 
-    const toggleDetails = () => {
-        setShowDetails(!showDetails);
-    };
-
+const DiagramViewer = () => {
     return (
-        <div style={{ border: '1px solid #ccc', padding: '10px', maxWidth: '300px' }}>
-            <h3>{scheme.name}</h3>
-            <img src={scheme.imageUrl} alt={scheme.name} style={{ maxWidth: '100%' }} />
-            <p onClick={toggleDetails}>Description: {scheme.description}</p>
-            {showDetails && (
-                <div>
-                    <p>ID: {scheme.id}</p>
-                    {/* Добавьте другие свойства схемы по необходимости */}
+        <div className={styles.scheme}>
+            <div className={styles.row}>
+                <div className={`${styles.side} ${styles.onLeft}`}></div>
+                <div className={`${styles.side} ${styles.onCenter}`}>
+                    <div className={styles.elem}>lorem</div>
                 </div>
-            )}
+                <div className={`${styles.side} ${styles.onRight}`}></div>
+            </div>
+
+            <div className={styles.row}>
+                <div className={`${styles.side} ${styles.onLeft}`}>
+                    <div className={styles.elem}>lorem</div>
+                    <div className={styles.elem}>lorem</div>
+                    <div className={styles.elem}>lorem</div>
+                </div>
+                <div className={`${styles.side} ${styles.onCenter}`}>
+                    <div className={styles.elem}>lorem</div>
+                </div>
+                <div className={`${styles.side} ${styles.onRight}`}>
+                    <div className={styles.elem}>lorem</div>
+                </div>
+            </div>
+
+            {/* Add more rows as needed */}
+
         </div>
     );
 };
 
-export default Scheme;
+export default DiagramViewer;

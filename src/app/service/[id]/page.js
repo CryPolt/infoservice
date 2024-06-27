@@ -51,7 +51,7 @@ export default function Service() {
             <div className={style.portfolio}>
                 <h1>{portfolioItem.title}</h1>
                 <p>{portfolioItem.description}</p>
-                <p><Scheme /></p>
+                <Scheme />
             </div>
         </>
     );

@@ -7,39 +7,34 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 10;
     const offset = (page - 1) * limit;
 
-    return pool.getConnection()
-        .then(connection => {
-            return connection.query('SELECT * FROM service LIMIT ? OFFSET ?', [limit, offset])
-                .then(([rows]) => {
-                    return connection.query('SELECT COUNT(*) as count FROM service')
-                        .then(([countRows]) => {
-                            connection.release();
-                            const total = countRows[0].count;
-                            return NextResponse.json({
-                                status: 200,
-                                body: {
-                                    data: rows,
-                                    total,
-                                    page,
-                                    limit
-                                }
-                            });
-                        });
-                })
-                .catch(queryError => {
-                    connection.release();
-                    console.error('Error executing query: ', queryError);
-                    return NextResponse.json({
-                        status: 500,
-                        body: { error: 'Error executing query' }
-                    });
-                });
-        })
-        .catch(connectionError => {
-            console.error('Error getting connection: ', connectionError);
+    try {
+        const connection = await pool.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT * FROM service LIMIT ? OFFSET ?', [limit, offset]);
+            const [[{ count }]] = await connection.query('SELECT COUNT(*) as count FROM service');
+            connection.release();
+            return NextResponse.json({
+                status: 200,
+                body: {
+                    data: rows,
+                    total: count,
+                    page,
+                    limit
+                }
+            });
+        } catch (queryError) {
+            connection.release();
+            console.error('Error executing query: ', queryError);
             return NextResponse.json({
                 status: 500,
-                body: { error: 'Error getting connection' }
+                body: { error: 'Error executing query' }
             });
+        }
+    } catch (connectionError) {
+        console.error('Error getting connection: ', connectionError);
+        return NextResponse.json({
+            status: 500,
+            body: { error: 'Error getting connection' }
         });
+    }
 }

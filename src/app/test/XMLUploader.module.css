@@ -1,0 +1,10 @@
+/* components/XMLUploader.module.css */
+
+.uploadContainer {
+    margin-bottom: 20px;
+}
+
+.fileInput {
+    display: block; /* Убедитесь, что элемент видим */
+    margin-top: 10px; /* Пример добавления отступа сверху */
+}

@@ -1,8 +1,9 @@
 :root {
   --row-gap: 1.2rem;
   --elem-gap: 0.5rem;
-  --border-as-line: 1px solid #aaa;
+  --border-as-line: 1px solid red;
   background-color: #666666;
+
 }
 
 *{box-sizing: border-box}

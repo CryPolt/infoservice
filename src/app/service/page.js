@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import style from './service.module.css';
 import { Header } from '../(components)/header/header';
 import { useState, useEffect } from 'react';
@@ -18,8 +18,9 @@ export default function Service() {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
+                console.log(data);
                 if (data.status === 200) {
-                    const activeServices = data.body.filter(item => item.isactive === 1);
+                    const activeServices = data.body.data.filter(item => item.isactive === 1);
                     setPortfolioItems(activeServices);
                     setError(null);
                 } else {

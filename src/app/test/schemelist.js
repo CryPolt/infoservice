@@ -8,7 +8,7 @@ const SchemeList = () => {
     const [schemesData, setSchemesData] = useState([]);
 
     useEffect(() => {
-        fetch('/api/schemes')
+        fetch('/api/scheme') // Remove extra parenthesis ')' here
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Failed to load data from server');

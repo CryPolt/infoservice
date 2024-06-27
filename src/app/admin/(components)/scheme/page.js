@@ -1,7 +1,7 @@
-"use client"
+// Scheme.jsx
 import React, { useState, useEffect } from 'react';
-import styles from './scheme.module.css';
-import Modal from '../modal/page';
+import styles from './scheme.module.css'; // Путь к CSS модулю для стилей
+import Modal from '../modal/page'; // Путь к модальному окну
 
 const Scheme = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -9,6 +9,8 @@ const Scheme = () => {
     const [elements, setElements] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [newElementName, setNewElementName] = useState('');
+    const [newElementPosition, setNewElementPosition] = useState('');
 
     useEffect(() => {
         const fetchElements = async () => {
@@ -36,12 +38,37 @@ const Scheme = () => {
     }, []);
 
     const handleClick = (id) => {
-        setModalContent(`Element ID: ${id}`);
-        setModalOpen(true);
+        const element = elements.find(el => el.id === id);
+        if (element) {
+            setModalContent(`Element ID: ${element.id}, Name: ${element.name}, Position: ${element.position}`);
+            setModalOpen(true);
+        }
     };
 
-    const closeModal = () => {
+    const handleCloseModal = () => {
         setModalOpen(false);
+    };
+
+    const handleCreateElement = async () => {
+        try {
+            const response = await fetch('/api/scheme/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: newElementName, position: newElementPosition }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to create element');
+            }
+            const data = await response.json();
+            console.log('New element created:', data);
+            setElements([...elements, data.body]); // Add the newly created element to the local state
+            setNewElementName('');
+            setNewElementPosition('');
+        } catch (error) {
+            console.error('Error creating element:', error);
+        }
     };
 
     if (loading) {
@@ -53,17 +80,43 @@ const Scheme = () => {
     }
 
     return (
-        <div className={styles.scheme} id="scheme">
-            {elements.map((element, index) => (
-                <div key={`element-${element.id}`} className={styles.element} onClick={() => handleClick(element.id)}>
-                    <div className={styles.name}>{element.name}</div>
+        <div className={styles.scheme}>
+            <div className={styles.newElementForm}>
+                <input
+                    type="text"
+                    placeholder="Name"
+                    value={newElementName}
+                    onChange={(e) => setNewElementName(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Position"
+                    value={newElementPosition}
+                    onChange={(e) => setNewElementPosition(e.target.value)}
+                />
+                <button onClick={handleCreateElement}>Create Element</button>
+            </div>
+            {elements.map(element => (
+                <div key={`element-${element.id}`} className={styles.element}>
+                    <div className={styles.name} onClick={() => handleClick(element.id)}>
+                        {element.name}
+                    </div>
                     <div className={styles.position}>{element.position}</div>
-                    {element.connections && element.connections.map(connection => (
-                        <div key={`connection-${connection.id}`} className={styles.connection} style={{ backgroundColor: connection.style }}></div>
+                    {element.connections && element.connections.map(connId => (
+                        <div key={`connection-${connId}`} className={styles.connection}></div>
                     ))}
                 </div>
             ))}
-            {isModalOpen && <Modal content={modalContent} onClose={closeModal} />}
+            {isModalOpen && (
+                <Modal>
+                    <div className={styles.modalContent}>
+                        <span className={styles.close} onClick={handleCloseModal}>&times;</span>
+                        <p>{modalContent}</p>
+                    </div>
+                </Modal>
+            )}
+
+
         </div>
     );
 };

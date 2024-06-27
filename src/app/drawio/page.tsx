@@ -6,6 +6,7 @@ import { getEmbedUrl } from '../../utils/getEmbedUrl';
 import { handleEvent } from '../../utils/handleEvent';
 import { useActions } from '../../hooks/useActions';
 
+// eslint-disable-next-line react/display-name
 const DrawIoEmbed = forwardRef<DrawIoEmbedRef, DrawIoEmbedProps>((props, ref) => {
     const {
         baseUrl,
@@ -29,6 +30,7 @@ const DrawIoEmbed = forwardRef<DrawIoEmbedRef, DrawIoEmbedProps>((props, ref) =>
     const iframeUrl = getEmbedUrl(baseUrl, urlParameters, !!configuration);
     const [isInitialized, setIsInitialized] = useState(false);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const messageHandler = (evt: MessageEvent) => {
         handleEvent(
             evt,
