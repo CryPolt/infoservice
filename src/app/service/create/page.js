@@ -1,16 +1,15 @@
 "use client"
 import { useState, useEffect } from 'react';
 import style from '../service.module.css';
-import { Header } from '@/app/(components)/header/header';
+import  {Header}  from '../../(components)/header/header';
 
 export default function CreateService() {
     const [modalOpen, setModalOpen] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
-    const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 1 });
+    const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 0 });
     const [portfolioItems, setPortfolioItems] = useState([]);
 
     useEffect(() => {
-        // Fetch existing services when component mounts
         fetchPortfolioItems();
     }, []);
 
@@ -29,7 +28,7 @@ export default function CreateService() {
             setPortfolioItems(data);
         } catch (error) {
             console.error('Error fetching services:', error);
-            setPortfolioItems([]); // Ensure it's an array even on error
+            setPortfolioItems([]); 
         }
     };
 
@@ -78,15 +77,13 @@ export default function CreateService() {
 
             console.log('New service created:', data);
 
-            // Update portfolioItems with the newly created service
             setPortfolioItems(prevItems => [...prevItems, data]);
 
-            // Optionally, reset form fields and close form after successful creation
-            setNewItem({ title: '', description: '', isactive: 1 });
+            setNewItem({ title: '', description: '', isactive: 0 });
             closeForm();
         } catch (error) {
             console.error('Error creating service:', error);
-            alert(error.message); // Show the error message to the user
+            alert(error.message); 
         }
     };
 

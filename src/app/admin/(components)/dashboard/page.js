@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 
@@ -6,6 +6,7 @@ const useClient = (endpoint) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pagination, setPagination] = useState({});
 
     useEffect(() => {
         fetch(endpoint)
@@ -16,7 +17,8 @@ const useClient = (endpoint) => {
                 return response.json();
             })
             .then(data => {
-                setData(data.body || []);
+                setData(data.body.data || []);
+                setPagination({ page: data.body.page, limit: data.body.limit, total: data.body.total });
                 setLoading(false);
             })
             .catch(error => {
@@ -26,11 +28,12 @@ const useClient = (endpoint) => {
             });
     }, [endpoint]);
 
-    return { data, loading, error, setData };
+    return { data, loading, error, pagination, setData };
 };
 
 const Dashboard = () => {
-    const { data: services, loading: loadingServices, setData: setServices } = useClient('/api/service');
+    const [currentPage, setCurrentPage] = useState(1);
+    const { data: services, loading: loadingServices, setData: setServices, pagination, error } = useClient(`/api/service?page=${currentPage}&limit=10`);
     const { data: tables, loading: loadingTables } = useClient('/api/db');
 
     const handleDelete = async (id) => {
@@ -117,8 +120,16 @@ const Dashboard = () => {
         }
     };
 
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
     if (loadingServices) {
         return <p>Loading services...</p>;
+    }
+
+    if (error) {
+        return <p>Error: {error.message}</p>;
     }
 
     if (!services || !Array.isArray(services) || services.length === 0) {
@@ -158,6 +169,17 @@ const Dashboard = () => {
                             <button className={styles.editButton} onClick={() => handleEdit(service.id)}>Edit</button>
                         </div>
                     </div>
+                ))}
+            </div>
+            <div className={styles.pagination}>
+                {Array.from({ length: Math.ceil(pagination.total / pagination.limit) }, (_, index) => (
+                    <button
+                        key={index}
+                        className={`${styles.pageButton} ${pagination.page === index + 1 ? styles.active : ''}`}
+                        onClick={() => handlePageChange(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
                 ))}
             </div>
 

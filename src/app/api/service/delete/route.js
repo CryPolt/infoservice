@@ -14,7 +14,6 @@ export async function DELETE(req) {
 
         const connection = await pool.getConnection();
 
-        // Check if the service exists
         const [rows] = await connection.query(
             'SELECT COUNT(*) AS count FROM service WHERE id = ?',
             [id]
@@ -26,13 +25,11 @@ export async function DELETE(req) {
             return NextResponse.json({ error: 'Service not found' }, { status: 404 });
         }
 
-        // Delete the service
         await connection.query(
             'DELETE FROM service WHERE id = ?',
             [id]
         );
 
-        // Fetch the updated list of services
         const [updatedRows] = await connection.query('SELECT * FROM service');
         connection.release();
 

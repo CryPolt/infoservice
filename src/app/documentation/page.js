@@ -9,7 +9,6 @@ export default function Documentation() {
     const [services, setServices] = useState([]);
 
     useEffect(() => {
-        // Function to fetch data from API
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/service');
@@ -31,7 +30,7 @@ export default function Documentation() {
             }
         };
         fetchData();
-    }, []); // Empty dependency array ensures this effect runs only once
+    }, []); 
 
     return (
         <>
@@ -62,33 +61,22 @@ export default function Documentation() {
 
                 <div className={styles.header}>Documentation</div>
                 <div className={styles.paragraph}>
-                    Welcome to the documentation page. Here you can find all the information you need to get started.
+                        Welcome Documentation
                 </div>
                 <div className={styles.codeBlock}>
                     <code>
-                        {`import {Header} from '../(components)/header/header'
-import {Left} from '../(components)/leftside/left'
-import styles from './page.module.css';
-
-export default function Documentation(){
-    return(
-        <>
-        <Header />
-            <Left />
-        </>
-    )
-}`}
+                        {`import {Header} from `}
                     </code>
                 </div>
                 <ul className={styles.bulletList}>
-                    <li>Introduction</li>
-                    <li>Getting Started</li>
-                    <li>API Reference</li>
+                    <li>Example</li>
+                    <li>Example</li>
+                    <li>Example</li>
                 </ul>
                 <ol className={styles.numberedList}>
-                    <li>Step 1: Install</li>
-                    <li>Step 2: Setup</li>
-                    <li>Step 3: Deploy</li>
+                    <li>Example</li>
+                    <li>Example</li>
+                    <li>Example</li>
                 </ol>
             </div>
         </div>

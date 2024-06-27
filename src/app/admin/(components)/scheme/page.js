@@ -1,5 +1,6 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import styles from './Scheme.module.css';
+import styles from './scheme.module.css';
 import Modal from '../modal/page';
 
 const Scheme = () => {

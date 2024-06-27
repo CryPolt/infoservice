@@ -15,7 +15,7 @@ export async function POST(req) {
 
         console.log("Request Body:", body);
 
-        if (!title || !description || typeof isactive !== 'number') {
+        if (!title || !description) {
             console.log("Invalid request format:", { title, description, isactive });
             return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
         }
