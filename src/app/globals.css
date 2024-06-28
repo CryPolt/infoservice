@@ -1,7 +1,7 @@
 :root {
   --row-gap: 1.2rem;
   --elem-gap: 0.5rem;
-  --border-as-line: 1px solid red;
+  --border-as-line: 1px solid white;
   background-color: #666666;
 
 }

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mindfusion/diagramming": "^4.4.2",
+    "@mindfusion/drawing": "^4.0.9",
     "@react-leaflet/core": "^2.1.0",
     "express": "^4.19.2",
     "fs": "^0.0.1-security",
