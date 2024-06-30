@@ -1,4 +1,5 @@
 // Scheme.jsx
+"use client"
 import React, { useState, useEffect } from 'react';
 import styles from './scheme.module.css'; // Путь к CSS модулю для стилей
 import Modal from '../modal/page'; // Путь к модальному окну

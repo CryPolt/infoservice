@@ -1,44 +1,38 @@
-import React from 'react';
-import { DiagramComponent, Inject, DiagramTools } from 'diagram-library-react';
-import { NodeModel, ConnectorModel, FlowShapeModel, BasicShapeModel } from 'diagram-library-react';
-
-const BlockDiagram: React.FC = () => {
-        const nodes: NodeModel[] = [
-                {
-                        id: 'node1',
-                        offsetX: 100,
-                        offsetY: 100,
-                        width: 100,
-                        height: 60,
-                        shape: { type: 'Basic', shape: 'Rectangle' },
-                        annotations: [{ content: 'Node 1' }]
-                },
-                {
-                        id: 'node2',
-                        offsetX: 300,
-                        offsetY: 100,
-                        width: 100,
-                        height: 60,
-                        shape: { type: 'Basic', shape: 'Rectangle' },
-                        annotations: [{ content: 'Node 2' }]
-                }
-        ];
-
-        const connectors: ConnectorModel[] = [
-                {
-                        id: 'connector1',
-                        sourceID: 'node1',
-                        targetID: 'node2'
-                }
-        ];
-
-        return (
-            <div style={{ width: '100%', height: '500px' }}>
-                    <DiagramComponent id="diagram" width={'100%'} height={'100%'} nodes={nodes} connectors={connectors}>
-                            <Inject services={[DiagramTools]} />
-                    </DiagramComponent>
-            </div>
-        );
-};
-
-export default BlockDiagram;
+// import go from 'gojs';
+//
+// function init() {
+//         var $ = go.GraphObject.make;  // for conciseness in defining templates
+//         var myDiagram =
+//             $(go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
+//                 { // enable undo & redo
+//                         "undoManager.isEnabled": true
+//                 });/*w   w   w .  d e   m   o2    s  .c   o  m */
+//         // define a simple Node template
+//         myDiagram.nodeTemplate =
+//             $(go.Node, "Auto",  // the Shape will go around the TextBlock
+//                 $(go.Shape, "RoundedRectangle",
+//                     { strokeWidth: 0, fill: "white"},  // default fill is white
+//                     // Shape.fill is bound to Node.data.color
+//                     new go.Binding("fill", "color")),
+//                 $(go.TextBlock,
+//                     { margin: 8},  // some room around the text
+//                     // TextBlock.text is bound to Node.data.key
+//                     new go.Binding("text", "key"))
+//             );
+//         // but use the default Link template, by not setting Diagram.linkTemplate
+//         // create the model data that will be represented by Nodes and Links
+//         myDiagram.model = new go.GraphLinksModel(
+//             [
+//                     { key: "Alpha", color: "lightblue"},
+//                     { key: "Beta", color: "orange"},
+//                     { key: "Gamma", color: "lightgreen"},
+//                     { key: "Delta", color: "pink"}
+//             ],
+//             [
+//                     { from: "Alpha", to: "Beta"},
+//                     { from: "Alpha", to: "Gamma"},
+//                     { from: "Beta", to: "Beta"},
+//                     { from: "Gamma", to: "Delta"},
+//                     { from: "Delta", to: "Alpha"}
+//             ]);
+// }

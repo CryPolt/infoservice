@@ -1,3 +1,4 @@
+// pages/api/service/create.js
 import pool from '../../../lib/db';
 import { NextResponse } from 'next/server';
 
@@ -11,12 +12,17 @@ export async function POST(req) {
 
     try {
         const body = await req.json();
-        const { title, description, isactive } = body;
+        const { title, description, isactive, svgid } = body;
 
         console.log("Request Body:", body);
+        console.log("Title Type:", typeof title);
+        console.log("Description Type:", typeof description);
+        console.log("IsActive Type:", typeof isactive);
+        console.log("SvgId Type:", typeof svgid);
 
-        if (!title || !description) {
-            console.log("Invalid request format:", { title, description, isactive });
+        // Update validation to allow null svgid if optional
+        if (!title || !description || typeof isactive !== 'number' || (svgid !== null && typeof svgid !== 'number')) {
+            console.log("Invalid request format:", { title, description, isactive, svgid });
             return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
         }
 
@@ -38,8 +44,8 @@ export async function POST(req) {
 
         console.log("Inserting new service");
         const [result] = await connection.query(
-            'INSERT INTO service (title, description, isactive) VALUES (?, ?, ?)',
-            [title, description, isactive]
+            'INSERT INTO service (title, description, isactive, svgid) VALUES (?, ?, ?, ?)',
+            [title, description, isactive, svgid]
         );
         connection.release();
 
@@ -50,7 +56,8 @@ export async function POST(req) {
             id: result.insertId,
             title,
             description,
-            isactive
+            isactive,
+            svgid
         }, { status: 201 });
 
     } catch (error) {

@@ -1,20 +1,36 @@
-import pool from '../../lib/db'; // Assuming pool is your MySQL connection pool
+import pool from '../../lib/db';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req, res) {
-    if (req.method === 'POST') {
-        const { schema } = req.body; // Assuming schema is sent in the request body
+export async function GET() {
 
+    try {
+        const connection = await pool.getConnection();
         try {
-            const connection = await pool.getConnection();
-            await connection.query('INSERT INTO diagrams (`schema`) VALUES (?)', [JSON.stringify(schema)]);
+            const [rows] = await connection.query('SELECT * FROM diagrama');
             connection.release();
-            res.status(200).json({ message: 'Schema saved successfully' });
-        } catch (error) {
-            console.error('Error saving schema:', error);
-            res.status(500).json({ message: 'Failed to save schema' });
+            if (rows.length === 0) {
+                return NextResponse.json({
+                    status: 404,
+                    body: { error: 'Diagrama not found' }
+                });
+            }
+            return NextResponse.json({
+                status: 200,
+                body: rows
+            });
+        } catch (queryError) {
+            connection.release();
+            console.error('Error executing query: ', queryError);
+            return NextResponse.json({
+                status: 500,
+                body: { error: 'Error executing query' }
+            });
         }
-    } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+    } catch (connectionError) {
+        console.error('Error getting connection: ', connectionError);
+        return NextResponse.json({
+            status: 500,
+            body: { error: 'Error getting connection' }
+        });
     }
 }

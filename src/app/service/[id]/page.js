@@ -1,39 +1,59 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import style from '../service.module.css';
 import { Header } from '../../(components)/header/header';
-import Image from "next/image";
-import sc from "../../../../public/sc.svg";
-import Scheme from "../../admin/(components)/scheme/page"
+import SvgViewer from '../../SvgEditor/(components)/SvgViewer';
+import { useParams } from 'next/navigation';
 
 export default function Service() {
     const { id } = useParams();
+
     const [portfolioItem, setPortfolioItem] = useState(null);
     const [error, setError] = useState(null);
+    const [svgContent, setSvgContent] = useState(null); // State to hold SVG content
 
     useEffect(() => {
-        if (id) {
-            const fetchData = async () => {
-                try {
-                    const response = await fetch(`/api/service/${id}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch data');
-                    }
-                    const data = await response.json();
-                    if (data.status === 200) {
-                        setPortfolioItem(data.body);
-                        setError(null);
-                    } else {
-                        throw new Error('Failed to fetch data');
-                    }
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                    setError(error.message);
+        const fetchData = async () => {
+            try {
+                // Fetch service details
+                const serviceResponse = await fetch(`/api/service/${id}`);
+                if (!serviceResponse.ok) {
+                    throw new Error('Failed to fetch service data');
                 }
-            };
+                const serviceData = await serviceResponse.json();
+                if (serviceData.status === 200) {
+                    setPortfolioItem(serviceData.body);
+                    setError(null);
+                } else {
+                    throw new Error('Failed to fetch service data');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError(error.message);
+            }
+        };
 
-            fetchData();
+        fetchData();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchSvg = async () => {
+            try {
+                const response = await fetch(`/api/getSVG?id=${id}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setSvgContent(data.svgData); // Set SVG content
+                } else {
+                    setError(data.message || 'Failed to load SVG');
+                }
+            } catch (error) {
+                setError('Failed to load SVG');
+            }
+        };
+
+        if (id) {
+            fetchSvg();
         }
     }, [id]);
 
@@ -41,7 +61,7 @@ export default function Service() {
         return <div>Error fetching data: {error}</div>;
     }
 
-    if (!portfolioItem) {
+    if (!portfolioItem || svgContent === null) {
         return <div>Loading...</div>;
     }
 
@@ -51,7 +71,11 @@ export default function Service() {
             <div className={style.portfolio}>
                 <h1>{portfolioItem.title}</h1>
                 <p>{portfolioItem.description}</p>
-                <Scheme />
+                <div className={style.svgContainer}>
+                    <h2>SVG Data:</h2>
+                    {/* Render SvgViewer passing svgContent */}
+                    <SvgViewer svgContent={svgContent}/> 
+                </div>
             </div>
         </>
     );

@@ -1,13 +1,16 @@
-"use client"
+"use client";
 import { useState, useEffect } from 'react';
 import style from '../service.module.css';
-import  {Header}  from '../../(components)/header/header';
+import { Header } from '../../(components)/header/header';
+import SvgUploadForm from '../../SvgEditor/(components)/SvgUploadForm/SvgUploadForm';
+import { useParams } from 'next/navigation'; // Updated import
 
 export default function CreateService() {
     const [modalOpen, setModalOpen] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
-    const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 0 });
+    const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 0, svgid: null });
     const [portfolioItems, setPortfolioItems] = useState([]);
+    const { id } = useParams(); // Using useParams to get dynamic route parameter
 
     useEffect(() => {
         fetchPortfolioItems();
@@ -28,7 +31,7 @@ export default function CreateService() {
             setPortfolioItems(data);
         } catch (error) {
             console.error('Error fetching services:', error);
-            setPortfolioItems([]); 
+            setPortfolioItems([]);
         }
     };
 
@@ -50,7 +53,15 @@ export default function CreateService() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewItem(prevState => ({ ...prevState, [name]: value }));
+        setNewItem(prevState => ({
+            ...prevState,
+            [name]: name === 'isactive' ? Number(value) : value
+        }));
+    };
+
+    const handleSvgUpload = (svgId) => {
+        console.log("SVG ID received:", svgId);
+        setNewItem(prevState => ({ ...prevState, svgid: svgId }));
     };
 
     const handleSubmit = async (e) => {
@@ -62,11 +73,7 @@ export default function CreateService() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    title: newItem.title,
-                    description: newItem.description,
-                    isactive:newItem.isactive,
-                }),
+                body: JSON.stringify(newItem),
             });
 
             const data = await response.json();
@@ -79,14 +86,18 @@ export default function CreateService() {
 
             setPortfolioItems(prevItems => [...prevItems, data]);
 
-            setNewItem({ title: '', description: '', isactive: 0 });
+            setNewItem({ title: '', description: '', isactive: 0, svgid: null });
             closeForm();
         } catch (error) {
             console.error('Error creating service:', error);
-            alert(error.message); 
+            alert(error.message);
         }
     };
 
+    const handleItemClick = (item) => {
+        setNewItem(item);
+        openModal();
+    };
 
     return (
         <>
@@ -94,7 +105,7 @@ export default function CreateService() {
             <div className={style.portfolio}>
                 <ul>
                     {portfolioItems.map(item => (
-                        <li key={item.id} onClick={() => openModal(item)}>
+                        <li key={item.id} onClick={() => handleItemClick(item)}>
                             <div className={style.caption}>
                                 <i className="fa fa-pencil fa-lg"></i>
                                 <h1>{item.title}</h1>
@@ -154,6 +165,7 @@ export default function CreateService() {
                                 </select>
                             </label>
                             <br />
+                            <SvgUploadForm onSvgUpload={handleSvgUpload} />
                             <button type="submit">Add</button>
                         </form>
                     </div>

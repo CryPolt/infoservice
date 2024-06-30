@@ -1,5 +1,68 @@
-#diagram-container {
-    width: 100%;
-    height: 600px;
+.diagrams {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.diagramList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.diagramItem {
+    margin-bottom: 20px;
+    padding: 20px;
     border: 1px solid #ccc;
+}
+
+.diagram {
+    margin-bottom: 10px;
+}
+
+.nodesContainer {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.node {
+    position: absolute;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.roundRectangle {
+    background-color: #3F8AE2;
+    width: 100%;
+    height: 100%;
+}
+
+.circle {
+    background-color: #438D57;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.cylinder {
+    background-color: #EA9C41;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.edgesContainer {
+    position: relative;
+}
+
+.edge {
+    position: absolute;
+    border-top: 2px solid #ccc;
 }

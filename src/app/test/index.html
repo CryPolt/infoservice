@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my demo</title>
+    <script src="https://unpkg.com/@babel/standalone@7.23.2/babel.js"></script>
+    <script src="https://unpkg.com/react@16.3.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.3.3/umd/react-dom.production.min.js"></script>
+    <!-- <script src="./node_modules/mxgraph/javascript/dist/build.js"></script> -->
+    <link rel="stylesheet" href="./assets/index.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'PingFang SC', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
+            font-size: 14px;
+            border: none;
+            user-select: none;
+        }
+
+        .metagraph-container .metagraph-refresh-btn {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app"></div>
+<script src="./umd/metaeditor.js"></script>
+<script type="text/babel">
+    const { Component } = React;
+    const { MetaGraphEditor, getLanguage, stringToXml, xmlToString } = MetaEditor;
+
+    const XML_DATA = `
+<mxGraphModel dx="1186" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="9v9bDfxMJK_rrW6hIOUh-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="9v9bDfxMJK_rrW6hIOUh-1" target="9v9bDfxMJK_rrW6hIOUh-3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="9v9bDfxMJK_rrW6hIOUh-1" value="Start" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="200" y="140" width="120" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="9v9bDfxMJK_rrW6hIOUh-3" value="End" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+      <mxGeometry x="400" y="140" width="120" height="60" as="geometry" />
+    </mxCell>
+  </root>
+</mxGraphModel>`;
+
+    class Demo extends Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                fileData: XML_DATA
+            };
+
+            this.rootRef = React.createRef();
+        }
+
+        componentDidMount() {
+            this.renderEditor();
+        }
+
+        updateXml = (fileData) => {
+            this.setState({
+                fileData
+            });
+        }
+
+        renderEditor = () => {
+            const { fileData } = this.state;
+            const renderExtra = el => {
+                ReactDOM.render(
+                    <div onClick={() => window.location.reload()} className="metagraph-refresh-btn">
+                        刷新
+                    </div>,
+                    el
+                );
+            };
+
+            const dom = this.rootRef.current;
+
+            const metaGraphEditor = new MetaGraphEditor({ container: dom, renderExtraMenu: renderExtra });
+            const lan = getLanguage('zh');
+            metaGraphEditor.init(lan, stringToXml(fileData), xml => {
+                const xmlString = xmlToString(xml);
+                xmlString && this.updateXml(xmlString);
+            });
+        };
+
+        render() {
+            return (
+                <div ref={this.rootRef} />
+            );
+        }
+    }
+    ReactDOM.render(<Demo />, document.getElementById('app'));
+</script>
+</body>
+
+</html>

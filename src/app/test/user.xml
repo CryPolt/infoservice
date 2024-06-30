@@ -1,0 +1,9 @@
+<users>
+<user id="u12">
+     <id>12</id>
+     <username>john</username>
+     <role>admin</role>
+     <active>false</active>
+     <create_date>2000-10-01</create_date>
+</user>
+</users>
