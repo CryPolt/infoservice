@@ -1,41 +1,33 @@
+// pages/admin/index.js
 "use client"
-import { useEffect, useState, useRef } from "react";
-import mx from "mxgraph";
-import Dashboard from "./(components)/dashboard/page";
-import Schem from "./(components)/scheme/page";
+import React, { useState } from 'react';
+import Leftside from './(components)/leftside/page'; // Adjust path as per your actual file structure
+import Dashboard from './(components)/dashboard/page'; // Adjust path as per your actual file structure
 
-export default function Admin() {
-    const [xmlData, setXmlData] = useState(null);
-    const containerRef = useRef(null);
-    const [graph, setGraph] = useState(null);
+const Admin = () => {
+  const [selectedPage, setSelectedPage] = useState('dashboard'); // State to track selected page
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch('/api/test');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setXmlData(data.xml); // Assuming data structure has a 'xml' key
-            } catch (err) {
-                console.error('Error fetching data:', err);
-            }
-        }
+  // Function to render the selected page based on state
+  const renderPage = () => {
+    switch (selectedPage) {
+      case 'dashboard':
+        return <Dashboard />;
+      default:
+        return null;
+    }
+  };
 
-        fetchData();
-    }, []);
+  return (
+    <div>
+      <h1>Admin Page</h1>
+      <div style={{ display: 'flex' }}>
+        <Leftside setSelectedPage={setSelectedPage} /> {/* Pass setSelectedPage to Leftside */}
+        <div style={{ marginLeft: '20px' }}>
+          {renderPage()} {/* Render the selected page component */}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-
-    return (
-        <>
-            <div>
-                <h1>Admin Page</h1>
-            </div>
-            <Dashboard />
-
-            <Schem />
-
-        </>
-    );
-}
+export default Admin;

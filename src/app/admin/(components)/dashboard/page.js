@@ -183,7 +183,7 @@ const Dashboard = () => {
                 ))}
             </div>
 
-            <h1>Database Analysis</h1>
+            {/* <h1>Database Analysis</h1>
             {loadingTables ? (
                 <p>Loading analysis...</p>
             ) : tables && tables.length > 0 ? (
@@ -199,7 +199,7 @@ const Dashboard = () => {
                 </div>
             ) : (
                 <p>No tables available.</p>
-            )}
+            )} */}
         </div>
     );
 };

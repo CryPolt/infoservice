@@ -1,6 +1,59 @@
+/* page.module.css */
+
 .container {
   display: flex;
-  justify-content: flex-start;
-  align-items:  flex-start;
-  width: 40em;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 2rem;
+  background-color: #ffffff; /* Фон страницы */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+}
+
+.introSection {
+  text-align: center;
+}
+
+.introSection h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333333; /* Цвет заголовка */
+}
+
+.introSection p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666666; /* Цвет текста */
+}
+
+.buttons {
+  margin-top: 2rem;
+}
+
+.button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #007bff; /* Цвет кнопок */
+  color: #ffffff; /* Цвет текста на кнопках */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3; /* Изменение цвета при наведении */
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 4rem;
+  }
+
+  .introSection {
+    max-width: 600px; /* Максимальная ширина блока с текстом */
+    margin: 0 auto; /* Центрирование по горизонтали */
+  }
 }

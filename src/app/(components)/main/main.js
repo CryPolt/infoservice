@@ -1,11 +1,13 @@
+// components/main/main.js
+
+import React from 'react';
+import { Cards } from './cards'; 
 import styles from './main.module.css';
-import {Cards} from "./cards";
 
 export const Main = () => {
-    return (
-            <div className={styles.mainSection}>
-                <Cards />
-            </div>
-
-    )
-}
+  return (
+    <div className={styles.mainSection}>
+      <Cards />
+    </div>
+  );
+};

@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Service() {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [currentItem, setCurrentItem] = useState(null);
     const [portfolioItems, setPortfolioItems] = useState([]);
     const [error, setError] = useState(null);
 
@@ -18,7 +16,6 @@ export default function Service() {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                console.log(data);
                 if (data.status === 200) {
                     const activeServices = data.body.data.filter(item => item.isactive === 1);
                     setPortfolioItems(activeServices);
@@ -35,48 +32,26 @@ export default function Service() {
         fetchData();
     }, []);
 
-    const openModal = (item) => {
-        setCurrentItem(item);
-        setModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setModalOpen(false);
-    };
-
     return (
         <>
             <Header />
-            <div className={style.portfolio}>
+            <div className={style.container}>
+                <h1 className={style.title}>Документация по сервисам</h1>
                 {error ? (
-                    <div className={style.err}>Error fetching data: {error}</div>
+                    <div className={style.error}>Ошибка при получении данных: {error}</div>
                 ) : (
-                    <ul>
+                    <div className={style.portfolio}>
                         {portfolioItems.map((item) => (
-                            <li key={item.id} onClick={() => openModal(item)}>
-                                <div className={style.caption}>
-                                    <i className="fa fa-pencil fa-lg"></i>
-                                    <h1>{item.title}</h1>
-                                    <p>{item.description}</p>
-                                </div>
-                            </li>
+                            <div key={item.id} className={style.item}>
+                                <h2>{item.title}</h2>
+                                <Link href={`/service/${item.id}`} className={style.link}>
+                                    Посмотреть документацию сервиса
+                                </Link>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </div>
-
-            {modalOpen && currentItem && (
-                <div className={style.modal}>
-                    <div className={style.modalContent}>
-                        <span className={style.close} onClick={closeModal}>&times;</span>
-                        <h2>{currentItem.title}</h2>
-                        <p>{currentItem.description}</p>
-                        <Link href={`/service/${currentItem.id}`}>
-                            <strong>Посмотреть документацию сервиса</strong>
-                        </Link>
-                    </div>
-                </div>
-            )}
         </>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import style from '../service.module.css';
+import style from './serviceid.module.css';
 import { Header } from '../../(components)/header/header';
 import SvgViewer from '../../SvgEditor/(components)/SvgViewer';
 import { useParams } from 'next/navigation';
@@ -10,12 +10,11 @@ export default function Service() {
 
     const [portfolioItem, setPortfolioItem] = useState(null);
     const [error, setError] = useState(null);
-    const [svgContent, setSvgContent] = useState(null); // State to hold SVG content
+    const [svgContent, setSvgContent] = useState(null); 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch service details
                 const serviceResponse = await fetch(`/api/service/${id}`);
                 if (!serviceResponse.ok) {
                     throw new Error('Failed to fetch service data');
@@ -43,7 +42,7 @@ export default function Service() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    setSvgContent(data.svgData); // Set SVG content
+                    setSvgContent(data.svgData); 
                 } else {
                     setError(data.message || 'Failed to load SVG');
                 }
@@ -73,7 +72,6 @@ export default function Service() {
                 <p>{portfolioItem.description}</p>
                 <div className={style.svgContainer}>
                     <h2>SVG Data:</h2>
-                    {/* Render SvgViewer passing svgContent */}
                     <SvgViewer svgContent={svgContent}/> 
                 </div>
             </div>
