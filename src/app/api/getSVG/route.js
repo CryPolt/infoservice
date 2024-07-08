@@ -3,7 +3,7 @@ import pool from '../../lib/db'; // Adjust the path to your db module as per you
 
 export async function GET(req) {
     try {
-        const { searchParams } = new URL(req.url);
+        const { searchParams } = new URL(req.url, `http://${req.headers.host}`);
         const id = searchParams.get('id');
 
         if (!id) {

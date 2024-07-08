@@ -50,10 +50,8 @@ const SvgEditor = ({ id }) => {
 
     return (
         <div>
-            {/* Dropdown or list to select SVG files */}
             <SvgSelector onSelect={handleSvgSelection} />
             
-            {/* Render the selected SVG */}
             <div dangerouslySetInnerHTML={{ __html: svgContent }} />
         </div>
     );

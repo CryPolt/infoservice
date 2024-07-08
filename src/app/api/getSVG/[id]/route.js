@@ -28,7 +28,7 @@ export async function GET(req) {
             console.error('Error retrieving SVG:', error);
             return NextResponse.json({ status: 500, error: 'Failed to retrieve SVG file' });
         } finally {
-            connection.release(); // Release the connection back to the pool
+            connection.release(); 
         }
     } catch (error) {
         console.error('Error processing request:', error);

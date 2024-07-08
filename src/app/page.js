@@ -3,7 +3,6 @@
 import React, { useEffect,useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import the new useRouter from next/navigation
 import { Header } from './(components)/header/header';
-import { Main } from './(components)/main/main';
 import styles from './page.module.css';
 
 const Home = () => {
@@ -57,7 +56,6 @@ const Home = () => {
                             </button>
                         </div>
                     </section>
-                    <Main />
                 </main>
             </div>
         </>
