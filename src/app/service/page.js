@@ -1,4 +1,5 @@
 "use client";
+
 import style from './service.module.css';
 import { Header } from '../(components)/header/header';
 import { useState, useEffect } from 'react';

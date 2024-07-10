@@ -4,66 +4,63 @@ import style from './serviceid.module.css';
 import { Header } from '../../(components)/header/header';
 import SvgViewer from '../../SvgEditor/(components)/SvgViewer';
 import { useParams } from 'next/navigation';
+import { getSvg } from '../../actions/Svg';
+import { showService } from '../../actions/Service';
 
 export default function Service() {
     const { id } = useParams();
-
+  
     const [portfolioItem, setPortfolioItem] = useState(null);
+    const [svgContent, setSvgContent] = useState(null);
     const [error, setError] = useState(null);
-    const [svgContent, setSvgContent] = useState(null); 
-
+  
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const serviceResponse = await fetch(`/api/service/${id}`);
-                if (!serviceResponse.ok) {
-                    throw new Error('Failed to fetch service data');
-                }
-                const serviceData = await serviceResponse.json();
-                if (serviceData.status === 200) {
-                    setPortfolioItem(serviceData.body);
+                const serviceResponse = await showService(id); // Using showService action
+                if (serviceResponse.status === 200) {
+                    setPortfolioItem(serviceResponse.body);
                     setError(null);
                 } else {
-                    throw new Error('Failed to fetch service data');
+                    throw new Error(serviceResponse.body.error || 'Failed to fetch service data');
                 }
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching service data:', error);
                 setError(error.message);
             }
         };
 
         fetchData();
     }, [id]);
-
+  
     useEffect(() => {
         const fetchSvg = async () => {
             try {
-                const response = await fetch(`/api/getSVG?id=${id}`);
-                const data = await response.json();
-
-                if (response.ok) {
-                    setSvgContent(data.svgData); 
+                const svgResponse = await getSvg(id); // Using getSvg action
+                if (svgResponse.status === 200) {
+                    const decodedSvg = atob(svgResponse.body.svgData);
+                    setSvgContent(decodedSvg);
+                    setError(null);
                 } else {
-                    setError(data.message || 'Failed to load SVG');
+                    throw new Error(svgResponse.body.error || 'Failed to fetch SVG data');
                 }
             } catch (error) {
+                console.error('Error fetching SVG data:', error);
                 setError('Failed to load SVG');
             }
         };
 
-        if (id) {
-            fetchSvg();
-        }
+        fetchSvg();
     }, [id]);
-
+  
     if (error) {
-        return <div>Error fetching data: {error}</div>;
+        return <div>Error: {error}</div>;
     }
-
+  
     if (!portfolioItem || svgContent === null) {
         return <div>Loading...</div>;
     }
-
+  
     return (
         <>
             <Header />
@@ -72,7 +69,7 @@ export default function Service() {
                 <p>{portfolioItem.description}</p>
                 <div className={style.svgContainer}>
                     <h2>SVG Data:</h2>
-                    <SvgViewer svgContent={svgContent}/> 
+                    <SvgViewer svgContent={svgContent} />
                 </div>
             </div>
         </>

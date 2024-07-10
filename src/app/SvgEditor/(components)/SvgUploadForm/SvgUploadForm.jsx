@@ -4,14 +4,14 @@ import { useState } from 'react';
 
 const SvgUploadForm = ({ onSvgUpload }) => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedId, setSelectedId] = useState(null); // Добавляем состояние для выбранного id
+    const [selectedId, setSelectedId] = useState(null); 
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
     };
 
     const handleIdChange = (e) => {
-        setSelectedId(e.target.value); // Обновляем выбранный id
+        setSelectedId(e.target.value); 
     };
 
     const handleUpload = async () => {
@@ -22,7 +22,7 @@ const SvgUploadForm = ({ onSvgUpload }) => {
 
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('id', selectedId); // Добавляем выбранный id в FormData
+        formData.append('id', selectedId); 
 
         try {
             const response = await fetch('/api/updateSvg', {
@@ -36,7 +36,7 @@ const SvgUploadForm = ({ onSvgUpload }) => {
                 throw new Error(data.error || 'Failed to upload SVG');
             }
 
-            onSvgUpload(data.svgId); // Передаем svgId обратно в родительский компонент
+            onSvgUpload(data.svgId); 
         } catch (error) {
             console.error('Error uploading SVG:', error);
             alert('Failed to upload SVG file.');

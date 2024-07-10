@@ -9,7 +9,7 @@ export default function Documentation() {
     const [services, setServices] = useState([]);
     const [selectedService, setSelectedService] = useState(null);
     const [error, setError] = useState(null);
-    const [showTools, setShowTools] = useState(false); // State to toggle tools visibility
+    const [showTools, setShowTools] = useState(false);
 
     useEffect(() => {
         fetch('/api/service')
@@ -40,11 +40,11 @@ export default function Documentation() {
 
     const handleServiceClick = (service) => {
         setSelectedService(service);
-        setShowTools(false); // Hide tools when a service is selected
+        setShowTools(false);
     };
 
     const handleToolsClick = () => {
-        setShowTools(true); // Show tools when clicked
+        setShowTools(true);
     };
 
     return (

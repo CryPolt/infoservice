@@ -1,6 +1,7 @@
 // pages/api/uploadSvg.js
+
 import { NextResponse } from 'next/server';
-import pool from '../../lib/db'; // Подключение к базе данных
+import { getPool } from '../../lib/db'; 
 
 export async function POST(req, res) {
     if (req.method !== 'POST') {
@@ -18,12 +19,14 @@ export async function POST(req, res) {
         const fileContent = await svgFile.arrayBuffer();
         const svgData = Buffer.from(fileContent);
 
+        const pool = getPool(); 
+
         const connection = await pool.getConnection();
 
         try {
-            await createSvgTable(connection); // Убедитесь, что таблица svg_files существует
+            await createSvgTable(connection); 
 
-            // Вставка SVG данных в таблицу svg_files
+       
             const insertSvgQuery = 'INSERT INTO svg_files (svg_data) VALUES (?)';
             const [insertResult] = await connection.execute(insertSvgQuery, [svgData]);
             const svgId = insertResult.insertId;
@@ -31,38 +34,38 @@ export async function POST(req, res) {
             return NextResponse.json({
                 status: 200,
                 message: 'SVG file uploaded successfully',
-                svgId: svgId
+                svgId: svgId,
             });
         } catch (error) {
             console.error('Error uploading SVG:', error);
             return NextResponse.json({
                 status: 500,
-                error: 'Failed to upload SVG file'
+                error: 'Failed to upload SVG file',
             });
         } finally {
-            connection.release(); // Освобождение соединения обратно в пул
+            connection.release(); 
         }
     } catch (error) {
         console.error('Error parsing request:', error);
         return NextResponse.json({
             status: 400,
-            error: 'Invalid request payload'
+            error: 'Invalid request payload',
         });
     }
 }
 
-async function createSvgTable(connection) {
-    try {
-        const query = `
-            CREATE TABLE IF NOT EXISTS svg_files (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                svg_data LONGBLOB NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `;
-        await connection.execute(query);
-    } catch (error) {
-        console.error('Error creating SVG files table:', error);
-        throw error;
-    }
-}
+// async function createSvgTable(connection) {
+//     try {
+//         const query = `
+//             CREATE TABLE IF NOT EXISTS svg_files (
+//                 id INT AUTO_INCREMENT PRIMARY KEY,
+//                 svg_data LONGBLOB NOT NULL,
+//                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//             )
+//         `;
+//         await connection.execute(query);
+//     } catch (error) {
+//         console.error('Error creating SVG files table:', error);
+//         throw error;
+//     }
+// }

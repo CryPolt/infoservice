@@ -7,9 +7,9 @@
   width: 100%;
   height: 100vh;
   padding: 2rem;
-  background-color: #ffffff; /* Фон страницы */
+  background-color: #ffffff; 
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
 .introSection {
@@ -19,13 +19,13 @@
 .introSection h1 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: #333333; /* Цвет заголовка */
+  color: #333333; 
 }
 
 .introSection p {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #666666; /* Цвет текста */
+  color: #666666; 
 }
 
 .buttons {
@@ -33,18 +33,22 @@
 }
 
 .button {
-  margin-right: 10px;
-  padding: 10px 20px;
-  background-color: #007bff; /* Цвет кнопок */
-  color: #ffffff; /* Цвет текста на кнопках */
-  border: none;
-  border-radius: 4px;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 1rem;
+  margin: 1%;
+  box-shadow: 10px;
+  justify-self: center;
+  display: -moz-deck;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: .3s ease;
+  
 }
 
 .button:hover {
-  background-color: #0056b3; /* Изменение цвета при наведении */
+  background-color: #f0ed45; 
 }
 
 @media (min-width: 768px) {
@@ -53,7 +57,7 @@
   }
 
   .introSection {
-    max-width: 600px; /* Максимальная ширина блока с текстом */
-    margin: 0 auto; /* Центрирование по горизонтали */
+    max-width: 600px; 
+    margin: 0 auto; 
   }
 }

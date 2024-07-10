@@ -26,7 +26,6 @@
 }
 
 .sidebarLink {
-    text-decoration: none;
     color: #8C8C8C;
     font-weight: 500;
     display: block;
@@ -34,10 +33,11 @@
     border-radius: 4px;
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: pointer; 
+    text-decoration: none;
 }
 
 .sidebarLink:hover {
-    background-color: #007bff;
+    background-color:  rgba(0, 0, 0, 0.1);
     color: #fff;
 }
 
@@ -53,7 +53,7 @@
 
 .serviceLink {
     text-decoration: none;
-    color: #007bff;
+    color: #7e7d7d;
     font-weight: 500;
     display: block;
     padding: 8px 12px;
@@ -63,7 +63,7 @@
 }
 
 .serviceLink:hover {
-    background-color: #007bff;
+    background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
 
@@ -96,16 +96,20 @@
 }
 
 .viewDetailsButton {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: 500;
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
+    width: 10rem;
+    height: 3rem;
+    border-radius: 1rem;
+    margin: 1%;
+    box-shadow: 10px;
+    justify-self: center;
+    display: -moz-deck;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: .3s ease;
+    
+  }
+  
 .viewDetailsButton:hover {
-    background-color: #007bff;
-    color: #fff;
-}
+    background-color: #f0ed45; 
+  }
