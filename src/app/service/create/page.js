@@ -5,11 +5,12 @@ import { Header } from '../../(components)/header/header';
 import SvgUploadForm from '../../SvgEditor/(components)/SvgUploadForm/SvgUploadForm';
 import { createService } from '../../actions/Service';
 
-
 export default function CreateService() {
     const [modalOpen, setModalOpen] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
     const [newItem, setNewItem] = useState({ title: '', description: '', isactive: 0, svgid: null });
+    const [selectedFile, setSelectedFile] = useState(null); 
+    const [selectedId, setSelectedId] = useState(''); 
 
     const toggleModal = () => setModalOpen(!modalOpen);
     const toggleForm = () => setFormOpen(!formOpen);
@@ -30,17 +31,37 @@ export default function CreateService() {
         e.preventDefault();
 
         try {
-            const result = await createService(newItem);
-            
-            if (result.status !== 201) {
-                throw new Error(result.body.error || 'Failed to create service');
+            // 1. Create the service
+            const serviceResult = await createService(newItem);
+
+            if (serviceResult.status !== 201) {
+                throw new Error(serviceResult.body.error || 'Failed to create service');
+            }
+
+            if (selectedFile && selectedId) {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('id', selectedId);
+
+                const response = await fetch('/api/uploadSvg', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to upload SVG');
+                }
+
+                handleSvgUpload(data.svgId);
             }
 
             setNewItem({ title: '', description: '', isactive: 0, svgid: null });
             toggleForm();
         } catch (error) {
             console.error('Error creating service:', error);
-            alert(error.message);
+            alert('Failed to create service');
         }
     };
 
@@ -62,7 +83,7 @@ export default function CreateService() {
                                 <input
                                     type="text"
                                     name="title"
-                                    value={newItem.title || ''} 
+                                    value={newItem.title || ''}
                                     onChange={handleInputChange}
                                 />
                             </label>
@@ -72,7 +93,7 @@ export default function CreateService() {
                                 <input
                                     type="text"
                                     name="description"
-                                    value={newItem.description || ''} 
+                                    value={newItem.description || ''}
                                     onChange={handleInputChange}
                                 />
                             </label>
@@ -89,7 +110,14 @@ export default function CreateService() {
                                 </select>
                             </label>
                             <br />
-                            <SvgUploadForm onSvgUpload={handleSvgUpload} />
+                            {/* Pass necessary props to SvgUploadForm */}
+                            <SvgUploadForm
+                                selectedFile={selectedFile}
+                                setSelectedFile={setSelectedFile}
+                                selectedId={selectedId}
+                                setSelectedId={setSelectedId}
+                                onSvgUpload={handleSvgUpload}
+                            />
                             <button type="submit">Add</button>
                         </form>
                     </div>

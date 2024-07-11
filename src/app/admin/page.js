@@ -1,13 +1,12 @@
-// pages/admin/index.js
 "use client"
 import React, { useState } from 'react';
-import Leftside from './(components)/leftside/page'; // Adjust path as per your actual file structure
-import Dashboard from './(components)/dashboard/page'; // Adjust path as per your actual file structure
+import Leftside from './(components)/leftside/page'; 
+import Dashboard from './(components)/dashboard/page'; 
 
 const Admin = () => {
-  const [selectedPage, setSelectedPage] = useState('dashboard'); // State to track selected page
+  const [selectedPage, setSelectedPage] = useState('dashboard'); 
 
-  // Function to render the selected page based on state
+
   const renderPage = () => {
     switch (selectedPage) {
       case 'dashboard':
@@ -21,9 +20,9 @@ const Admin = () => {
     <div>
       <h1>Admin Page</h1>
       <div style={{ display: 'flex' }}>
-        <Leftside setSelectedPage={setSelectedPage} /> {/* Pass setSelectedPage to Leftside */}
+        <Leftside setSelectedPage={setSelectedPage} /> 
         <div style={{ marginLeft: '20px' }}>
-          {renderPage()} {/* Render the selected page component */}
+          {renderPage()} 
         </div>
       </div>
     </div>

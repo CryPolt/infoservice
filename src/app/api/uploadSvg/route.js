@@ -19,14 +19,13 @@ export async function POST(req, res) {
         const fileContent = await svgFile.arrayBuffer();
         const svgData = Buffer.from(fileContent);
 
-        const pool = getPool(); 
+        const pool = getPool(); // Ensure this function returns a MySQL pool instance
 
         const connection = await pool.getConnection();
 
         try {
-            await createSvgTable(connection); 
+            await createSvgTable(connection); // Ensure the table exists before inserting
 
-       
             const insertSvgQuery = 'INSERT INTO svg_files (svg_data) VALUES (?)';
             const [insertResult] = await connection.execute(insertSvgQuery, [svgData]);
             const svgId = insertResult.insertId;
@@ -43,7 +42,7 @@ export async function POST(req, res) {
                 error: 'Failed to upload SVG file',
             });
         } finally {
-            connection.release(); 
+            connection.release(); // Release the connection back to the pool
         }
     } catch (error) {
         console.error('Error parsing request:', error);
@@ -54,18 +53,18 @@ export async function POST(req, res) {
     }
 }
 
-// async function createSvgTable(connection) {
-//     try {
-//         const query = `
-//             CREATE TABLE IF NOT EXISTS svg_files (
-//                 id INT AUTO_INCREMENT PRIMARY KEY,
-//                 svg_data LONGBLOB NOT NULL,
-//                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-//             )
-//         `;
-//         await connection.execute(query);
-//     } catch (error) {
-//         console.error('Error creating SVG files table:', error);
-//         throw error;
-//     }
-// }
+async function createSvgTable(connection) {
+    try {
+        const query = `
+            CREATE TABLE IF NOT EXISTS svg_files (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                svg_data LONGBLOB NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+        await connection.execute(query);
+    } catch (error) {
+        console.error('Error creating SVG files table:', error);
+        throw error;
+    }
+}

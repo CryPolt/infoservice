@@ -1,17 +1,12 @@
-// SvgUploadForm.jsx
-
 import { useState } from 'react';
 
-const SvgUploadForm = ({ onSvgUpload }) => {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedId, setSelectedId] = useState(null); 
-
+const SvgUploadForm = ({ selectedFile, setSelectedFile, selectedId, setSelectedId, onSvgUpload }) => {
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
     };
 
     const handleIdChange = (e) => {
-        setSelectedId(e.target.value); 
+        setSelectedId(e.target.value);
     };
 
     const handleUpload = async () => {
@@ -22,11 +17,11 @@ const SvgUploadForm = ({ onSvgUpload }) => {
 
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('id', selectedId); 
+        formData.append('id', selectedId);
 
         try {
-            const response = await fetch('/api/updateSvg', {
-                method: 'PUT',
+            const response = await fetch('/api/uploadSvg', {
+                method: 'POST',
                 body: formData,
             });
 
