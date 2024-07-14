@@ -84,6 +84,8 @@
     border-radius: 4px;
     background-color: #ffffff;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    width: 100%;
+
 }
 
 .serviceDetails {
@@ -101,3 +103,58 @@
 .paragraph {
     line-height: 1.6;
 }
+/* Basic editor styles */
+.tiptap > *:first-child {
+    margin-top: 0 !important; 
+    background-color: white; 
+}
+
+/* List styles */
+.tiptap ul,
+.tiptap ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+
+.tiptap ul li p,
+.tiptap ol li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+/* Heading styles */
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+    line-height: 1.1;
+    margin-top: 2.5rem;
+    text-wrap: pretty;
+}
+
+.tiptap h1,
+.tiptap h2 {
+    margin-top: 3.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tiptap h1 {
+    font-size: 1.4rem;
+}
+
+.tiptap h2 {
+    font-size: 1.2rem;
+}
+
+.tiptap h3 {
+    font-size: 1.1rem;
+}
+
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+    font-size: 1rem;
+}
+

@@ -1,11 +1,10 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Header } from '../(components)/header/header';
-import { AboutContent } from './about/page';
 import styles from './page.module.css';
-import Link from 'next/link';
 import { getDocumentation } from '../actions/Documentation';
 import { getService } from '../actions/Service';
+import Notes from './Notes';
 
 export default function Documentation() {
     const [documents, setDocuments] = useState([]);
@@ -22,65 +21,61 @@ export default function Documentation() {
         fetchServices();
     }, []);
 
-    const fetchDocumentation = () => {
-        getDocumentation()
-            .then(response => {
-                if (response.status === 200) {
-                    setDocuments(response.body.data);
-                } else {
-                    throw new Error('Failed to fetch documentation');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching documentation:', error);
-                setError('Failed to fetch documentation. Please try again later.');
-            });
+    const fetchDocumentation = async () => {
+        try {
+            const response = await getDocumentation(1, 10);
+            console.log('Fetched Documents:', response); // Debugging
+            if (response.status === 200) {
+                setDocuments(response.body.data);
+            } else {
+                throw new Error('Failed to fetch documentation');
+            }
+        } catch (error) {
+            console.error('Error fetching documentation:', error);
+            setError('Failed to fetch documentation. Please try again later.');
+        }
     };
 
-    const fetchServices = () => {
-        getService()
-            .then(response => {
-                if (response.status === 200) {
-                    setServices(response.body.data);
-                } else {
-                    throw new Error('Failed to fetch services');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching services:', error);
-                setError('Failed to fetch services. Please try again later.');
-            });
+    const fetchServices = async () => {
+        try {
+            const response = await getService();
+            console.log('Fetched Services:', response); // Debugging
+            if (response.status === 200) {
+                setServices(response.body.data);
+            } else {
+                throw new Error('Failed to fetch services');
+            }
+        } catch (error) {
+            console.error('Error fetching services:', error);
+            setError('Failed to fetch services. Please try again later.');
+        }
     };
 
-    const toggleDocuments = () => {
-        setDocumentsOpen(!documentsOpen);
-    };
+    const toggleDocuments = () => setDocumentsOpen(!documentsOpen);
 
-    const toggleServices = () => {
-        setServicesOpen(!servicesOpen);
-    };
+    const toggleServices = () => setServicesOpen(!servicesOpen);
 
     const handleDocumentClick = (document) => {
+        console.log('Document clicked:', document);
         setSelectedDocument(document);
         setSelectedService(null);
-        setAboutContent(null); // Clear the "About Content" if another item is selected
+        setAboutContent(null);
     };
 
     const handleServiceClick = (service) => {
+        console.log('Service clicked:', service);
         setSelectedService(service);
         setSelectedDocument(null);
-        setAboutContent(null); // Clear the "About Content" if another item is selected
+        setAboutContent(null);
     };
 
     const handleAboutClick = () => {
-        // Load "About Content" when clicking on the respective item
-        setAboutContent('Here will be information about the stack used.'); // Replace with actual content you want to display
+        setAboutContent('Here will be information about the stack used.');
     };
 
     return (
         <>
             <Header />
-
             <div className={styles.container}>
                 <div className={styles.sidebar}>
                     <ul className={styles.sidebarList}>
@@ -88,7 +83,7 @@ export default function Documentation() {
                             <span className={styles.sidebarLink} onClick={toggleDocuments}>
                                 {documentsOpen ? '▼' : '►'} Documents
                             </span>
-                            {documentsOpen && (
+                            {documentsOpen && documents.length > 0 && (
                                 <ul className={styles.sidebarNestedList}>
                                     {documents.map(document => (
                                         <li key={document.id} className={styles.sidebarListItem}>
@@ -107,7 +102,7 @@ export default function Documentation() {
                             <span className={styles.sidebarLink} onClick={toggleServices}>
                                 {servicesOpen ? '▼' : '►'} Services
                             </span>
-                            {servicesOpen && (
+                            {servicesOpen && services.length > 0 && (
                                 <ul className={styles.sidebarNestedList}>
                                     {services.map(service => (
                                         <li key={service.id} className={styles.sidebarListItem}>
@@ -123,7 +118,6 @@ export default function Documentation() {
                             )}
                         </li>
                         <li className={styles.sidebarListItem}>
-                            {/* Handle click on "About Stack" */}
                             <span className={styles.sidebarLink} onClick={handleAboutClick}>
                                 About Stack
                             </span>
@@ -138,7 +132,7 @@ export default function Documentation() {
                     ) : selectedDocument ? (
                         <div className={styles.documentDetails}>
                             <h1>{selectedDocument.title}</h1>
-                            <p>{selectedDocument.content}</p>
+                            <Notes documents={[selectedDocument]} />
                         </div>
                     ) : selectedService ? (
                         <div className={styles.serviceDetails}>
@@ -147,7 +141,10 @@ export default function Documentation() {
                             <p>Status: {selectedService.isactive ? 'Active' : 'Inactive'}</p>
                         </div>
                     ) : aboutContent ? (
-                        <AboutContent content={aboutContent} /> // Pass "About Content" to AboutContent component
+                        <div className={styles.defaultContent}>
+                            <h1 className={styles.header}>About Stack</h1>
+                            <p className={styles.paragraph}>{aboutContent}</p>
+                        </div>
                     ) : (
                         <div className={styles.defaultContent}>
                             <h1 className={styles.header}>Welcome to PAY Services Documentation</h1>

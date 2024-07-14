@@ -3,95 +3,104 @@
 'use server';
 
 import { getPool } from '../lib/db';
+import parse from 'html-react-parser'; 
 
 // Получение всех документов с пагинацией
 export async function getDocumentation(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
-    const pool = getPool();
-
+    const pool = getPool(); 
+  
     try {
-        const connection = await pool.getConnection();
-        try {
-            const [rows] = await connection.query('SELECT * FROM documentation LIMIT ? OFFSET ?', [limit, offset]);
-            const [[{ count }]] = await connection.query('SELECT COUNT(*) as count FROM documentation');
-            connection.release();
-            return {
-                status: 200,
-                body: {
-                    data: rows,
-                    total: count,
-                    page,
-                    limit
-                }
-            };
-        } catch (queryError) {
-            connection.release();
-            console.error('Error executing query: ', queryError);
-            return {
-                status: 500,
-                body: { error: 'Error executing query' }
-            };
-        }
-    } catch (connectionError) {
-        console.error('Error getting connection: ', connectionError);
+      const connection = await pool.getConnection();
+      try {
+        const [rows] = await connection.query('SELECT * FROM test LIMIT ? OFFSET ?', [limit, offset]);
+  
+        // Ensure content is correctly parsed as a string of HTML
+        const parsedRows = rows.map(row => ({
+          ...row,
+          content: row.content || '', 
+        }));
+  
+        const [[{ count }]] = await connection.query('SELECT COUNT(*) as count FROM test');
+  
+        connection.release(); 
+     
         return {
-            status: 500,
-            body: { error: 'Error getting connection' }
+          status: 200,
+          body: {
+            data: parsedRows,
+            total: count,
+            page,
+            limit,
+          },
         };
+      } catch (queryError) {
+        connection.release();
+        console.error('Error executing query: ', queryError);
+        return {
+          status: 500,
+          body: { error: 'Error executing query' },
+        };
+      }
+    } catch (connectionError) {
+      console.error('Error getting connection: ', connectionError);
+      return {
+        status: 500,
+        body: { error: 'Error getting connection' },
+      };
     }
-}
+  }
 
-// Создание нового документа
-export async function createDocumentation({ title, content, author }) {
+  export async function createDocumentation({ title, content, author }) {
     const pool = getPool();
-
+  
     try {
-        const connection = await pool.getConnection();
-        try {
-            const [existingDoc] = await connection.query(
-                'SELECT COUNT(*) AS count FROM documentation WHERE title = ? AND content = ?',
-                [title, content]
-            );
-            const count = existingDoc[0].count;
-
-            if (count > 0) {
-                connection.release();
-                return {
-                    status: 409,
-                    body: { error: 'Document already exists' }
-                };
-            }
-
-            const [result] = await connection.query(
-                'INSERT INTO documentation (title, content) VALUES (?, ?)',
-                [title, content, author]
-            );
-            connection.release();
-
-            return {
-                status: 201,
-                body: {
-                    success: true,
-                    title,
-                    content,
-                }
-            };
-        } catch (queryError) {
-            connection.release();
-            console.error('Error executing query: ', queryError);
-            return {
-                status: 500,
-                body: { error: 'Error executing query' }
-            };
+      const connection = await pool.getConnection();
+      try {
+        const [existingDoc] = await connection.query(
+          'SELECT COUNT(*) AS count FROM documentation WHERE title = ? AND content = ?',
+          [title, content]
+        );
+        const count = existingDoc[0].count;
+  
+        if (count > 0) {
+          connection.release();
+          return {
+            status: 409,
+            body: { error: 'Document already exists' }
+          };
         }
-    } catch (connectionError) {
-        console.error('Error getting connection: ', connectionError);
+  
+        const [result] = await connection.query(
+          'INSERT INTO documentation (title, content) VALUES (?, ?)',
+          [title, content]
+        );
+        connection.release();
+  
         return {
-            status: 500,
-            body: { error: 'Error getting connection' }
+          status: 201,
+          body: {
+            success: true,
+            title,
+            content,
+          }
         };
+      } catch (queryError) {
+        connection.release();
+        console.error('Error executing query: ', queryError);
+        return {
+          status: 500,
+          body: { error: 'Error executing query' }
+        };
+      }
+    } catch (connectionError) {
+      console.error('Error getting connection: ', connectionError);
+      return {
+        status: 500,
+        body: { error: 'Error getting connection' }
+      };
     }
-}
+  }
 
 // Получение документа по его ID
 export async function showDocumentation(id) {
@@ -100,7 +109,7 @@ export async function showDocumentation(id) {
     try {
         const connection = await pool.getConnection();
         try {
-            const [rows] = await connection.query('SELECT * FROM documentation WHERE id = ?', [id]);
+            const [rows] = await connection.query('SELECT * FROM test WHERE id = ?', [id]);
             connection.release();
 
             if (rows.length === 0) {
